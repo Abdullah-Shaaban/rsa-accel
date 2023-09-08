@@ -1,0 +1,8 @@
+Task 1
+ 2. In each simulation cycle, the simulator goes to the time of the next event and updates all the signal that had a scheduled value change. It then executes each process that had any of the changed signals in their sensitivity lists and schedules new events in case the execution will lead to new values for the signals affected by the process. This is repeated until the event queue is empty or we hit the simulation time limit.
+
+ 3. When executing a process causes a signal's value to change, the simulator schedules that value change in the future as a new event in the queue. If the change had an explicit delay, the scheduled time for the value change is current time + explicit delay. Otherwise, the scheduled time is current time + delta delay. The duration of a delta delay can depend on each simulator and its implementation.
+
+Task 2
+ 1. Image
+ 2. It ends with a stable value of Q=0 and QN=0
