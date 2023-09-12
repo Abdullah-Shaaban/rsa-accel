@@ -1,0 +1,12 @@
+1. How many fliṕflops? 1338 in the implemented design.
+
+2. How many LUTs? 1716 in the implemented design.
+
+3. What is a LUT? A small memory element that can be configured to store a truth table for a small boolean function. Many LUTs in an FPGA are configured in concert and properly connected to form a large circuit.
+
+4. What is the total on-chip power. 0.459W in the implemented design.
+
+5. Things that can be explored:
+ a. In simulation. How the design is expected to behave under different input stimuli.
+ b. In synthesis. Resource consumption for a logical view of the design under different optimization configurations.
+ c. In implementation. Different ways to physically connect the logic blocks that are implementing our design on the FPGA.

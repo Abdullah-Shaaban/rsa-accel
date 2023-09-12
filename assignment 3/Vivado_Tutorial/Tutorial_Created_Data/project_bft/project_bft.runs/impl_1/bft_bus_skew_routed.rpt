@@ -1,0 +1,15 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2022.2 (lin64) Build 3671981 Fri Oct 14 04:59:54 MDT 2022
+| Date         : Fri Sep  8 13:46:53 2023
+| Host         : nicolas-suse running 64-bit openSUSE Tumbleweed
+| Command      : report_bus_skew -warn_on_violation -file bft_bus_skew_routed.rpt -pb bft_bus_skew_routed.pb -rpx bft_bus_skew_routed.rpx
+| Design       : bft
+| Device       : 7z020-clg400
+| Speed File   : -1  PRODUCTION 1.12 2019-11-22
+------------------------------------------------------------------------------------------------------------------------------------------
+
+Bus Skew Report
+
+No bus skew constraints
+

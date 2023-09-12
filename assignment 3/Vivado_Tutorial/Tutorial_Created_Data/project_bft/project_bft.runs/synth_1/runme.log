@@ -1,0 +1,1013 @@
+
+*** Running vivado
+    with args -log bft.vds -m64 -product Vivado -mode batch -messageDb vivado.pb -notrace -source bft.tcl
+
+
+****** Vivado v2022.2 (64-bit)
+  **** SW Build 3671981 on Fri Oct 14 04:59:54 MDT 2022
+  **** IP Build 3669848 on Fri Oct 14 08:30:02 MDT 2022
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+
+source bft.tcl -notrace
+Command: read_checkpoint -auto_incremental -incremental {/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/utils_1/imports/synth_1/bft.dcp}
+INFO: [Vivado 12-5825] Read reference checkpoint from /run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/utils_1/imports/synth_1/bft.dcp for incremental synthesis
+INFO: [Vivado 12-7989] Please ensure there are no constraint changes
+Command: synth_design -top bft -part xc7z020clg400-1
+Starting synth_design
+Attempting to get a license for feature 'Synthesis' and/or device 'xc7z020'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7z020'
+INFO: [Vivado_Tcl 4-1810] synth_design options have changed between reference and incremental; A full resynthesis will be run
+INFO: [Device 21-403] Loading part xc7z020clg400-1
+INFO: [Designutils 20-5440] No compile time benefit to using incremental synthesis; A full resynthesis will be run
+INFO: [Designutils 20-4379] Flow is switching to default flow due to incremental criteria not met. If you would like to alter this behaviour and have the flow terminate instead, please set the following parameter config_implementation {autoIncr.Synth.RejectBehavior Terminate}
+INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 4 processes.
+INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
+INFO: [Synth 8-7075] Helper process launched with PID 14596
+INFO: [Synth 8-11241] undeclared symbol 'REGCCE', assumed default net type 'wire' [/run/media/nicolas/Coisas/Software/Xilinx/Vivado/2022.2/data/verilog/src/unimacro/BRAM_SINGLE_MACRO.v:2170]
+INFO: [Synth 8-11241] undeclared symbol 'RDERR', assumed default net type 'wire' [/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/async_fifo.v:211]
+INFO: [Synth 8-11241] undeclared symbol 'WRER', assumed default net type 'wire' [/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/async_fifo.v:212]
+INFO: [Synth 8-11241] undeclared symbol 'RDERR', assumed default net type 'wire' [/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/async_fifo.v:218]
+INFO: [Synth 8-11241] undeclared symbol 'WRER', assumed default net type 'wire' [/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/async_fifo.v:219]
+---------------------------------------------------------------------------------
+Starting RTL Elaboration : Time (s): cpu = 00:00:02 ; elapsed = 00:00:03 . Memory (MB): peak = 1969.633 ; gain = 373.738 ; free physical = 43888 ; free virtual = 68618
+Synthesis current peak Physical Memory [PSS] (MB): peak = 1394.216; parent = 1188.460; children = 205.756
+Synthesis current peak Virtual Memory [VSS] (MB): peak = 2937.590; parent = 1969.637; children = 967.953
+---------------------------------------------------------------------------------
+INFO: [Synth 8-638] synthesizing module 'bft' [/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/bft.vhdl:52]
+WARNING: [Synth 8-614] signal 'wbInputData' is read in the process but is not in the sensitivity list [/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/bft.vhdl:94]
+WARNING: [Synth 8-614] signal 'wbInputDataStage0' is read in the process but is not in the sensitivity list [/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/bft.vhdl:94]
+INFO: [Synth 8-226] default block is never used [/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/bft.vhdl:122]
+INFO: [Synth 8-638] synthesizing module 'round_1' [/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/bftLib/round_1.vhdl:50]
+INFO: [Synth 8-638] synthesizing module 'coreTransform' [/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/bftLib/core_transform.vhdl:60]
+	Parameter DATA_WIDTH bound to: 16 - type: integer 
+WARNING: [Synth 8-5974] attribute "use_dsp48" has been deprecated, please use "use_dsp" instead 
+INFO: [Synth 8-256] done synthesizing module 'coreTransform' (0#1) [/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/bftLib/core_transform.vhdl:60]
+INFO: [Synth 8-256] done synthesizing module 'round_1' (0#1) [/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/bftLib/round_1.vhdl:50]
+INFO: [Synth 8-638] synthesizing module 'round_2' [/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/bftLib/round_2.vhdl:50]
+INFO: [Synth 8-256] done synthesizing module 'round_2' (0#1) [/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/bftLib/round_2.vhdl:50]
+INFO: [Synth 8-638] synthesizing module 'round_3' [/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/bftLib/round_3.vhdl:50]
+INFO: [Synth 8-256] done synthesizing module 'round_3' (0#1) [/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/bftLib/round_3.vhdl:50]
+INFO: [Synth 8-638] synthesizing module 'round_4' [/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/bftLib/round_4.vhdl:53]
+INFO: [Synth 8-256] done synthesizing module 'round_4' (0#1) [/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/bftLib/round_4.vhdl:53]
+INFO: [Synth 8-3491] module 'FifoBuffer' declared at '/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/FifoBuffer.v:31' bound to instance 'ingressFifo' of component 'FifoBuffer' [/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/bft.vhdl:249]
+INFO: [Synth 8-6157] synthesizing module 'FifoBuffer' [/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/FifoBuffer.v:31]
+INFO: [Synth 8-6157] synthesizing module 'async_fifo' [/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/async_fifo.v:38]
+	Parameter DEVICE bound to: 7SERIES - type: string 
+	Parameter FIFO_WIDTH bound to: 32 - type: integer 
+	Parameter FIFO_DEPTH bound to: 10 - type: integer 
+	Parameter FIFO_RAM_TYPE bound to: BLOCKRAM - type: string 
+INFO: [Synth 8-6155] done synthesizing module 'async_fifo' (0#1) [/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/async_fifo.v:38]
+WARNING: [Synth 8-7071] port 'prog_empty' of module 'async_fifo' is unconnected for instance 'buffer_fifo' [/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/FifoBuffer.v:55]
+WARNING: [Synth 8-7071] port 'prog_full' of module 'async_fifo' is unconnected for instance 'buffer_fifo' [/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/FifoBuffer.v:55]
+WARNING: [Synth 8-7023] instance 'buffer_fifo' of module 'async_fifo' has 12 connections declared, but only 10 given [/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/FifoBuffer.v:55]
+INFO: [Synth 8-6155] done synthesizing module 'FifoBuffer' (0#1) [/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/FifoBuffer.v:31]
+INFO: [Synth 8-3491] module 'FifoBuffer' declared at '/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/FifoBuffer.v:31' bound to instance 'ingressFifo' of component 'FifoBuffer' [/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/bft.vhdl:249]
+INFO: [Synth 8-3491] module 'FifoBuffer' declared at '/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/FifoBuffer.v:31' bound to instance 'ingressFifo' of component 'FifoBuffer' [/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/bft.vhdl:249]
+INFO: [Synth 8-3491] module 'FifoBuffer' declared at '/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/FifoBuffer.v:31' bound to instance 'ingressFifo' of component 'FifoBuffer' [/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/bft.vhdl:249]
+INFO: [Synth 8-3491] module 'FifoBuffer' declared at '/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/FifoBuffer.v:31' bound to instance 'ingressFifo' of component 'FifoBuffer' [/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/bft.vhdl:249]
+INFO: [Synth 8-3491] module 'FifoBuffer' declared at '/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/FifoBuffer.v:31' bound to instance 'ingressFifo' of component 'FifoBuffer' [/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/bft.vhdl:249]
+INFO: [Synth 8-3491] module 'FifoBuffer' declared at '/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/FifoBuffer.v:31' bound to instance 'ingressFifo' of component 'FifoBuffer' [/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/bft.vhdl:249]
+INFO: [Synth 8-3491] module 'FifoBuffer' declared at '/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/FifoBuffer.v:31' bound to instance 'ingressFifo' of component 'FifoBuffer' [/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/bft.vhdl:249]
+INFO: [Synth 8-3491] module 'FifoBuffer' declared at '/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/FifoBuffer.v:31' bound to instance 'egressFifo' of component 'FifoBuffer' [/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/bft.vhdl:255]
+INFO: [Synth 8-3491] module 'FifoBuffer' declared at '/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/FifoBuffer.v:31' bound to instance 'egressFifo' of component 'FifoBuffer' [/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/bft.vhdl:255]
+INFO: [Synth 8-3491] module 'FifoBuffer' declared at '/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/FifoBuffer.v:31' bound to instance 'egressFifo' of component 'FifoBuffer' [/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/bft.vhdl:255]
+INFO: [Synth 8-3491] module 'FifoBuffer' declared at '/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/FifoBuffer.v:31' bound to instance 'egressFifo' of component 'FifoBuffer' [/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/bft.vhdl:255]
+INFO: [Synth 8-3491] module 'FifoBuffer' declared at '/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/FifoBuffer.v:31' bound to instance 'egressFifo' of component 'FifoBuffer' [/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/bft.vhdl:255]
+INFO: [Synth 8-3491] module 'FifoBuffer' declared at '/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/FifoBuffer.v:31' bound to instance 'egressFifo' of component 'FifoBuffer' [/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/bft.vhdl:255]
+INFO: [Synth 8-3491] module 'FifoBuffer' declared at '/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/FifoBuffer.v:31' bound to instance 'egressFifo' of component 'FifoBuffer' [/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/bft.vhdl:255]
+INFO: [Synth 8-3491] module 'FifoBuffer' declared at '/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/FifoBuffer.v:31' bound to instance 'egressFifo' of component 'FifoBuffer' [/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/bft.vhdl:255]
+INFO: [Synth 8-226] default block is never used [/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/bft.vhdl:288]
+INFO: [Synth 8-256] done synthesizing module 'bft' (0#1) [/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/bft.vhdl:52]
+WARNING: [Synth 8-6014] Unused sequential element readIngressFifo_reg was removed.  [/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/bft.vhdl:106]
+WARNING: [Synth 8-6014] Unused sequential element loadEgressFifo_reg was removed.  [/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/sources_1/imports/hdl/bft.vhdl:208]
+---------------------------------------------------------------------------------
+Finished RTL Elaboration : Time (s): cpu = 00:00:03 ; elapsed = 00:00:04 . Memory (MB): peak = 2038.602 ; gain = 442.707 ; free physical = 43961 ; free virtual = 68692
+Synthesis current peak Physical Memory [PSS] (MB): peak = 1394.216; parent = 1188.460; children = 205.756
+Synthesis current peak Virtual Memory [VSS] (MB): peak = 3006.559; parent = 2038.605; children = 967.953
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:03 ; elapsed = 00:00:04 . Memory (MB): peak = 2056.414 ; gain = 460.520 ; free physical = 43957 ; free virtual = 68688
+Synthesis current peak Physical Memory [PSS] (MB): peak = 1394.216; parent = 1188.460; children = 205.756
+Synthesis current peak Virtual Memory [VSS] (MB): peak = 3024.371; parent = 2056.418; children = 967.953
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:03 ; elapsed = 00:00:04 . Memory (MB): peak = 2056.414 ; gain = 460.520 ; free physical = 43957 ; free virtual = 68688
+Synthesis current peak Physical Memory [PSS] (MB): peak = 1394.216; parent = 1188.460; children = 205.756
+Synthesis current peak Virtual Memory [VSS] (MB): peak = 3024.371; parent = 2056.418; children = 967.953
+---------------------------------------------------------------------------------
+Netlist sorting complete. Time (s): cpu = 00:00:00.04 ; elapsed = 00:00:00.03 . Memory (MB): peak = 2056.414 ; gain = 0.000 ; free physical = 43949 ; free virtual = 68680
+INFO: [Project 1-570] Preparing netlist for logic optimization
+
+Processing XDC Constraints
+Initializing timing engine
+Parsing XDC File [/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/constrs_1/imports/assignment 3/bft_zynq.xdc]
+Finished Parsing XDC File [/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/constrs_1/imports/assignment 3/bft_zynq.xdc]
+INFO: [Project 1-236] Implementation specific constraints were found while reading constraint file [/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.srcs/constrs_1/imports/assignment 3/bft_zynq.xdc]. These constraints will be ignored for synthesis but will be used in implementation. Impacted constraints are listed in the file [.Xil/bft_propImpl.xdc].
+Resolution: To avoid this warning, move constraints listed in [.Xil/bft_propImpl.xdc] to another XDC file and exclude this new file from synthesis with the used_in_synthesis property (File Properties dialog in GUI) and re-run elaboration/synthesis.
+Completed Processing XDC Constraints
+
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2215.164 ; gain = 0.000 ; free physical = 43828 ; free virtual = 68559
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+Constraint Validation Runtime : Time (s): cpu = 00:00:00.01 ; elapsed = 00:00:00.01 . Memory (MB): peak = 2215.164 ; gain = 0.000 ; free physical = 43827 ; free virtual = 68558
+INFO: [Designutils 20-5440] No compile time benefit to using incremental synthesis; A full resynthesis will be run
+INFO: [Designutils 20-4379] Flow is switching to default flow due to incremental criteria not met. If you would like to alter this behaviour and have the flow terminate instead, please set the following parameter config_implementation {autoIncr.Synth.RejectBehavior Terminate}
+INFO: [Synth 8-11241] undeclared symbol 'REGCCE', assumed default net type 'wire' [/run/media/nicolas/Coisas/Software/Xilinx/Vivado/2022.2/data/verilog/src/unimacro/BRAM_SINGLE_MACRO.v:2170]
+---------------------------------------------------------------------------------
+Finished Constraint Validation : Time (s): cpu = 00:00:08 ; elapsed = 00:00:09 . Memory (MB): peak = 2215.164 ; gain = 619.270 ; free physical = 43919 ; free virtual = 68657
+Synthesis current peak Physical Memory [PSS] (MB): peak = 1394.216; parent = 1188.460; children = 205.756
+Synthesis current peak Virtual Memory [VSS] (MB): peak = 3151.105; parent = 2183.152; children = 967.953
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Loading Part and Timing Information
+---------------------------------------------------------------------------------
+Loading part: xc7z020clg400-1
+---------------------------------------------------------------------------------
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:08 ; elapsed = 00:00:09 . Memory (MB): peak = 2215.164 ; gain = 619.270 ; free physical = 43919 ; free virtual = 68657
+Synthesis current peak Physical Memory [PSS] (MB): peak = 1394.216; parent = 1188.460; children = 205.756
+Synthesis current peak Virtual Memory [VSS] (MB): peak = 3151.105; parent = 2183.152; children = 967.953
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying 'set_property' XDC Constraints
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:08 ; elapsed = 00:00:09 . Memory (MB): peak = 2215.164 ; gain = 619.270 ; free physical = 43919 ; free virtual = 68657
+Synthesis current peak Physical Memory [PSS] (MB): peak = 1394.216; parent = 1188.460; children = 205.756
+Synthesis current peak Virtual Memory [VSS] (MB): peak = 3151.105; parent = 2183.152; children = 967.953
+---------------------------------------------------------------------------------
+INFO: [Synth 8-802] inferred FSM for state register 'loadState_reg' in module 'bft'
+---------------------------------------------------------------------------------------------------
+                   State |                     New Encoding |                Previous Encoding 
+---------------------------------------------------------------------------------------------------
+                      s0 |                              000 |                              000
+                      s1 |                              001 |                              001
+                      s2 |                              010 |                              010
+                      s3 |                              011 |                              011
+                      s4 |                              100 |                              100
+                      s5 |                              101 |                              101
+                      s6 |                              110 |                              110
+                      s7 |                              111 |                              111
+---------------------------------------------------------------------------------------------------
+INFO: [Synth 8-3354] encoded FSM with state register 'loadState_reg' using encoding 'sequential' in module 'bft'
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:08 ; elapsed = 00:00:09 . Memory (MB): peak = 2215.164 ; gain = 619.270 ; free physical = 43913 ; free virtual = 68652
+Synthesis current peak Physical Memory [PSS] (MB): peak = 1394.216; parent = 1188.460; children = 205.756
+Synthesis current peak Virtual Memory [VSS] (MB): peak = 3151.105; parent = 2183.152; children = 967.953
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start RTL Component Statistics 
+---------------------------------------------------------------------------------
+Detailed RTL Component Info : 
++---Adders : 
+	   2 Input   11 Bit       Adders := 32    
++---XORs : 
+	   2 Input     16 Bit         XORs := 64    
+	   2 Input     10 Bit         XORs := 32    
++---Registers : 
+	               32 Bit    Registers := 17    
+	               16 Bit    Registers := 64    
+	               14 Bit    Registers := 1     
+	               11 Bit    Registers := 32    
+	               10 Bit    Registers := 80    
+	                8 Bit    Registers := 1     
+	                1 Bit    Registers := 85    
++---RAMs : 
+	              32K Bit	(1024 X 32 bit)          RAMs := 16    
++---Muxes : 
+	   4 Input    8 Bit        Muxes := 1     
+	   8 Input    8 Bit        Muxes := 1     
+	   8 Input    3 Bit        Muxes := 1     
+	   2 Input    3 Bit        Muxes := 8     
+	   2 Input    1 Bit        Muxes := 7     
+	   9 Input    1 Bit        Muxes := 1     
+---------------------------------------------------------------------------------
+Finished RTL Component Statistics 
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Part Resource Summary
+---------------------------------------------------------------------------------
+Part Resources:
+DSPs: 220 (col length:60)
+BRAMs: 280 (col length: RAMB18 60 RAMB36 30)
+---------------------------------------------------------------------------------
+Finished Part Resource Summary
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Cross Boundary and Area Optimization
+---------------------------------------------------------------------------------
+WARNING: [Synth 8-7080] Parallel synthesis criteria is not met
+DSP Report: Generating DSP xOutReg_reg, operation Mode is: (C'+A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xOutReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: operator plusOp is absorbed into DSP xOutReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutReg_reg.
+DSP Report: Generating DSP xOutStepReg_reg, operation Mode is: (C'-A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xOutStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator minusOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: Generating DSP xOutReg_reg, operation Mode is: (C'+A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xOutReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: operator plusOp is absorbed into DSP xOutReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutReg_reg.
+DSP Report: Generating DSP xOutStepReg_reg, operation Mode is: (C'-A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xOutStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator minusOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: Generating DSP xOutReg_reg, operation Mode is: (C'+A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xOutReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: operator plusOp is absorbed into DSP xOutReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutReg_reg.
+DSP Report: Generating DSP xOutStepReg_reg, operation Mode is: (C'-A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xOutStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator minusOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: Generating DSP xOutReg_reg, operation Mode is: (C'+A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xOutReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: operator plusOp is absorbed into DSP xOutReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutReg_reg.
+DSP Report: Generating DSP xOutStepReg_reg, operation Mode is: (C'-A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xOutStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator minusOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: Generating DSP xOutReg_reg, operation Mode is: (C'+A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xOutReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: operator plusOp is absorbed into DSP xOutReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutReg_reg.
+DSP Report: Generating DSP xOutStepReg_reg, operation Mode is: (C'-A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xOutStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator minusOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: Generating DSP xOutReg_reg, operation Mode is: (C'+A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xOutReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: operator plusOp is absorbed into DSP xOutReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutReg_reg.
+DSP Report: Generating DSP xOutStepReg_reg, operation Mode is: (C'-A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xOutStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator minusOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: Generating DSP xOutReg_reg, operation Mode is: (C'+A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xOutReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: operator plusOp is absorbed into DSP xOutReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutReg_reg.
+DSP Report: Generating DSP xOutStepReg_reg, operation Mode is: (C'-A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xOutStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator minusOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: Generating DSP xOutReg_reg, operation Mode is: (C'+A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xOutReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: operator plusOp is absorbed into DSP xOutReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutReg_reg.
+DSP Report: Generating DSP xOutStepReg_reg, operation Mode is: (C'-A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xOutStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator minusOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: Generating DSP xOutReg_reg, operation Mode is: (C'+A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xOutReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: operator plusOp is absorbed into DSP xOutReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutReg_reg.
+DSP Report: Generating DSP xOutStepReg_reg, operation Mode is: (C'-A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xOutStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator minusOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: Generating DSP xOutReg_reg, operation Mode is: (C'+A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xOutReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: operator plusOp is absorbed into DSP xOutReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutReg_reg.
+DSP Report: Generating DSP xOutStepReg_reg, operation Mode is: (C'-A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xOutStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator minusOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: Generating DSP xOutReg_reg, operation Mode is: (C'+A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xOutReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: operator plusOp is absorbed into DSP xOutReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutReg_reg.
+DSP Report: Generating DSP xOutStepReg_reg, operation Mode is: (C'-A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xOutStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator minusOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: Generating DSP xOutReg_reg, operation Mode is: (C'+A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xOutReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: operator plusOp is absorbed into DSP xOutReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutReg_reg.
+DSP Report: Generating DSP xOutStepReg_reg, operation Mode is: (C'-A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xOutStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator minusOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: Generating DSP xOutReg_reg, operation Mode is: (C'+A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xOutReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: operator plusOp is absorbed into DSP xOutReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutReg_reg.
+DSP Report: Generating DSP xOutStepReg_reg, operation Mode is: (C'-A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xOutStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator minusOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: Generating DSP xOutReg_reg, operation Mode is: (C'+A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xOutReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: operator plusOp is absorbed into DSP xOutReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutReg_reg.
+DSP Report: Generating DSP xOutStepReg_reg, operation Mode is: (C'-A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xOutStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator minusOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: Generating DSP xOutReg_reg, operation Mode is: (C'+A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xOutReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: operator plusOp is absorbed into DSP xOutReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutReg_reg.
+DSP Report: Generating DSP xOutStepReg_reg, operation Mode is: (C'-A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xOutStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator minusOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: Generating DSP xOutReg_reg, operation Mode is: (C'+A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xOutReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: operator plusOp is absorbed into DSP xOutReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutReg_reg.
+DSP Report: Generating DSP xOutStepReg_reg, operation Mode is: (C'-A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xOutStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator minusOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: Generating DSP xOutReg_reg, operation Mode is: (C'+A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xOutReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: operator plusOp is absorbed into DSP xOutReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutReg_reg.
+DSP Report: Generating DSP xOutStepReg_reg, operation Mode is: (C'-A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xOutStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator minusOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: Generating DSP xOutReg_reg, operation Mode is: (C'+A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xOutReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: operator plusOp is absorbed into DSP xOutReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutReg_reg.
+DSP Report: Generating DSP xOutStepReg_reg, operation Mode is: (C'-A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xOutStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator minusOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: Generating DSP xOutReg_reg, operation Mode is: (C'+A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xOutReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: operator plusOp is absorbed into DSP xOutReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutReg_reg.
+DSP Report: Generating DSP xOutStepReg_reg, operation Mode is: (C'-A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xOutStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator minusOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: Generating DSP xOutReg_reg, operation Mode is: (C'+A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xOutReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: operator plusOp is absorbed into DSP xOutReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutReg_reg.
+DSP Report: Generating DSP xOutStepReg_reg, operation Mode is: (C'-A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xOutStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator minusOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: Generating DSP xOutReg_reg, operation Mode is: (C'+A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xOutReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: operator plusOp is absorbed into DSP xOutReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutReg_reg.
+DSP Report: Generating DSP xOutStepReg_reg, operation Mode is: (C'-A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xOutStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator minusOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: Generating DSP xOutReg_reg, operation Mode is: (C'+A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xOutReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: operator plusOp is absorbed into DSP xOutReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutReg_reg.
+DSP Report: Generating DSP xOutStepReg_reg, operation Mode is: (C'-A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xOutStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator minusOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: Generating DSP xOutReg_reg, operation Mode is: (C'+A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xOutReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: operator plusOp is absorbed into DSP xOutReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutReg_reg.
+DSP Report: Generating DSP xOutStepReg_reg, operation Mode is: (C'-A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xOutStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator minusOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: Generating DSP xOutReg_reg, operation Mode is: (C'+A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xOutReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: operator plusOp is absorbed into DSP xOutReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutReg_reg.
+DSP Report: Generating DSP xOutStepReg_reg, operation Mode is: (C'-A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xOutStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator minusOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: Generating DSP xOutReg_reg, operation Mode is: (C'+A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xOutReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: operator plusOp is absorbed into DSP xOutReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutReg_reg.
+DSP Report: Generating DSP xOutStepReg_reg, operation Mode is: (C'-A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xOutStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator minusOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: Generating DSP xOutReg_reg, operation Mode is: (C'+A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xOutReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: operator plusOp is absorbed into DSP xOutReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutReg_reg.
+DSP Report: Generating DSP xOutStepReg_reg, operation Mode is: (C'-A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xOutStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator minusOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: Generating DSP xOutReg_reg, operation Mode is: (C'+A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xOutReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: operator plusOp is absorbed into DSP xOutReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutReg_reg.
+DSP Report: Generating DSP xOutStepReg_reg, operation Mode is: (C'-A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xOutStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator minusOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: Generating DSP xOutReg_reg, operation Mode is: (C'+A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xOutReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: operator plusOp is absorbed into DSP xOutReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutReg_reg.
+DSP Report: Generating DSP xOutStepReg_reg, operation Mode is: (C'-A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xOutStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator minusOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: Generating DSP xOutReg_reg, operation Mode is: (C'+A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xOutReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: operator plusOp is absorbed into DSP xOutReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutReg_reg.
+DSP Report: Generating DSP xOutStepReg_reg, operation Mode is: (C'-A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xOutStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator minusOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: Generating DSP xOutReg_reg, operation Mode is: (C'+A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xOutReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: operator plusOp is absorbed into DSP xOutReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutReg_reg.
+DSP Report: Generating DSP xOutStepReg_reg, operation Mode is: (C'-A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xOutStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator minusOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: Generating DSP xOutReg_reg, operation Mode is: (C'+A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xOutReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: operator plusOp is absorbed into DSP xOutReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutReg_reg.
+DSP Report: Generating DSP xOutStepReg_reg, operation Mode is: (C'-A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xOutStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator minusOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: Generating DSP xOutReg_reg, operation Mode is: (C'+A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: register xOutReg_reg is absorbed into DSP xOutReg_reg.
+DSP Report: operator plusOp is absorbed into DSP xOutReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutReg_reg.
+DSP Report: Generating DSP xOutStepReg_reg, operation Mode is: (C'-A2*B2)'.
+DSP Report: register xStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register uReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: register xOutStepReg_reg is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator minusOp is absorbed into DSP xOutStepReg_reg.
+DSP Report: operator multOp is absorbed into DSP xOutStepReg_reg.
+---------------------------------------------------------------------------------
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:11 ; elapsed = 00:00:13 . Memory (MB): peak = 2215.164 ; gain = 619.270 ; free physical = 43888 ; free virtual = 68629
+Synthesis current peak Physical Memory [PSS] (MB): peak = 1394.216; parent = 1188.460; children = 205.756
+Synthesis current peak Virtual Memory [VSS] (MB): peak = 3151.105; parent = 2183.152; children = 967.953
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start ROM, RAM, DSP, Shift Register and Retiming Reporting
+---------------------------------------------------------------------------------
+
+Block RAM: Preliminary Mapping Report (see note below)
++------------+--------------------------------------------------------------------------------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
+|Module Name | RTL Object                                                                           | PORT A (Depth x Width) | W | R | PORT B (Depth x Width) | W | R | Ports driving FF | RAMB18 | RAMB36 | 
++------------+--------------------------------------------------------------------------------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
+|bft         | ingressLoop[0].ingressFifo/buffer_fifo/infer_fifo.block_ram_performance.fifo_ram_reg | 1 K x 32(NO_CHANGE)    | W |   | 1 K x 32(WRITE_FIRST)  |   | R | Port A and B     | 0      | 1      | 
+|bft         | ingressLoop[1].ingressFifo/buffer_fifo/infer_fifo.block_ram_performance.fifo_ram_reg | 1 K x 32(NO_CHANGE)    | W |   | 1 K x 32(WRITE_FIRST)  |   | R | Port A and B     | 0      | 1      | 
+|bft         | ingressLoop[2].ingressFifo/buffer_fifo/infer_fifo.block_ram_performance.fifo_ram_reg | 1 K x 32(NO_CHANGE)    | W |   | 1 K x 32(WRITE_FIRST)  |   | R | Port A and B     | 0      | 1      | 
+|bft         | ingressLoop[3].ingressFifo/buffer_fifo/infer_fifo.block_ram_performance.fifo_ram_reg | 1 K x 32(NO_CHANGE)    | W |   | 1 K x 32(WRITE_FIRST)  |   | R | Port A and B     | 0      | 1      | 
+|bft         | ingressLoop[4].ingressFifo/buffer_fifo/infer_fifo.block_ram_performance.fifo_ram_reg | 1 K x 32(NO_CHANGE)    | W |   | 1 K x 32(WRITE_FIRST)  |   | R | Port A and B     | 0      | 1      | 
+|bft         | ingressLoop[5].ingressFifo/buffer_fifo/infer_fifo.block_ram_performance.fifo_ram_reg | 1 K x 32(NO_CHANGE)    | W |   | 1 K x 32(WRITE_FIRST)  |   | R | Port A and B     | 0      | 1      | 
+|bft         | ingressLoop[6].ingressFifo/buffer_fifo/infer_fifo.block_ram_performance.fifo_ram_reg | 1 K x 32(NO_CHANGE)    | W |   | 1 K x 32(WRITE_FIRST)  |   | R | Port A and B     | 0      | 1      | 
+|bft         | ingressLoop[7].ingressFifo/buffer_fifo/infer_fifo.block_ram_performance.fifo_ram_reg | 1 K x 32(NO_CHANGE)    | W |   | 1 K x 32(WRITE_FIRST)  |   | R | Port A and B     | 0      | 1      | 
+|bft         | egressLoop[0].egressFifo/buffer_fifo/infer_fifo.block_ram_performance.fifo_ram_reg   | 1 K x 32(NO_CHANGE)    | W |   | 1 K x 32(WRITE_FIRST)  |   | R | Port A and B     | 0      | 1      | 
+|bft         | egressLoop[1].egressFifo/buffer_fifo/infer_fifo.block_ram_performance.fifo_ram_reg   | 1 K x 32(NO_CHANGE)    | W |   | 1 K x 32(WRITE_FIRST)  |   | R | Port A and B     | 0      | 1      | 
+|bft         | egressLoop[2].egressFifo/buffer_fifo/infer_fifo.block_ram_performance.fifo_ram_reg   | 1 K x 32(NO_CHANGE)    | W |   | 1 K x 32(WRITE_FIRST)  |   | R | Port A and B     | 0      | 1      | 
+|bft         | egressLoop[3].egressFifo/buffer_fifo/infer_fifo.block_ram_performance.fifo_ram_reg   | 1 K x 32(NO_CHANGE)    | W |   | 1 K x 32(WRITE_FIRST)  |   | R | Port A and B     | 0      | 1      | 
+|bft         | egressLoop[4].egressFifo/buffer_fifo/infer_fifo.block_ram_performance.fifo_ram_reg   | 1 K x 32(NO_CHANGE)    | W |   | 1 K x 32(WRITE_FIRST)  |   | R | Port A and B     | 0      | 1      | 
+|bft         | egressLoop[5].egressFifo/buffer_fifo/infer_fifo.block_ram_performance.fifo_ram_reg   | 1 K x 32(NO_CHANGE)    | W |   | 1 K x 32(WRITE_FIRST)  |   | R | Port A and B     | 0      | 1      | 
+|bft         | egressLoop[6].egressFifo/buffer_fifo/infer_fifo.block_ram_performance.fifo_ram_reg   | 1 K x 32(NO_CHANGE)    | W |   | 1 K x 32(WRITE_FIRST)  |   | R | Port A and B     | 0      | 1      | 
+|bft         | egressLoop[7].egressFifo/buffer_fifo/infer_fifo.block_ram_performance.fifo_ram_reg   | 1 K x 32(NO_CHANGE)    | W |   | 1 K x 32(WRITE_FIRST)  |   | R | Port A and B     | 0      | 1      | 
++------------+--------------------------------------------------------------------------------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
+
+Note: The table above is a preliminary report that shows the Block RAMs at the current stage of the synthesis flow. Some Block RAMs may be reimplemented as non Block RAM primitives later in the synthesis flow. Multiple instantiated Block RAMs are reported only once. 
+
+DSP: Preliminary Mapping Report (see note below. The ' indicates corresponding REG is set)
++--------------+-------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
+|Module Name   | DSP Mapping | A Size | B Size | C Size | D Size | P Size | AREG | BREG | CREG | DREG | ADREG | MREG | PREG | 
++--------------+-------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
+|coreTransform | (C'+A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'-A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'-A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'-A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'-A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'-A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'-A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'-A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'-A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'-A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'-A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'-A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'-A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'-A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'-A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'-A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'-A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'-A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'-A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'-A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'-A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'-A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'-A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'-A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'-A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'-A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'-A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'-A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'-A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'-A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'-A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'-A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'-A2*B2)' | 16     | 16     | 16     | -      | 32     | 1    | 1    | 1    | -    | -     | 0    | 1    | 
++--------------+-------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
+
+Note: The table above is a preliminary report that shows the DSPs inferred at the current stage of the synthesis flow. Some DSP may be reimplemented as non DSP primitives later in the synthesis flow. Multiple instantiated DSPs are reported only once.
+---------------------------------------------------------------------------------
+Finished ROM, RAM, DSP, Shift Register and Retiming Reporting
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying XDC Timing Constraints
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:15 ; elapsed = 00:00:17 . Memory (MB): peak = 2215.164 ; gain = 619.270 ; free physical = 43741 ; free virtual = 68481
+Synthesis current peak Physical Memory [PSS] (MB): peak = 1535.591; parent = 1329.887; children = 205.756
+Synthesis current peak Virtual Memory [VSS] (MB): peak = 3151.105; parent = 2183.152; children = 967.953
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Timing Optimization
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Timing Optimization : Time (s): cpu = 00:00:16 ; elapsed = 00:00:17 . Memory (MB): peak = 2215.164 ; gain = 619.270 ; free physical = 43729 ; free virtual = 68470
+Synthesis current peak Physical Memory [PSS] (MB): peak = 1547.142; parent = 1341.438; children = 205.756
+Synthesis current peak Virtual Memory [VSS] (MB): peak = 3151.105; parent = 2183.152; children = 967.953
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start ROM, RAM, DSP, Shift Register and Retiming Reporting
+---------------------------------------------------------------------------------
+
+Block RAM: Final Mapping Report
++------------+--------------------------------------------------------------------------------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
+|Module Name | RTL Object                                                                           | PORT A (Depth x Width) | W | R | PORT B (Depth x Width) | W | R | Ports driving FF | RAMB18 | RAMB36 | 
++------------+--------------------------------------------------------------------------------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
+|bft         | ingressLoop[0].ingressFifo/buffer_fifo/infer_fifo.block_ram_performance.fifo_ram_reg | 1 K x 32(NO_CHANGE)    | W |   | 1 K x 32(WRITE_FIRST)  |   | R | Port A and B     | 0      | 1      | 
+|bft         | ingressLoop[1].ingressFifo/buffer_fifo/infer_fifo.block_ram_performance.fifo_ram_reg | 1 K x 32(NO_CHANGE)    | W |   | 1 K x 32(WRITE_FIRST)  |   | R | Port A and B     | 0      | 1      | 
+|bft         | ingressLoop[2].ingressFifo/buffer_fifo/infer_fifo.block_ram_performance.fifo_ram_reg | 1 K x 32(NO_CHANGE)    | W |   | 1 K x 32(WRITE_FIRST)  |   | R | Port A and B     | 0      | 1      | 
+|bft         | ingressLoop[3].ingressFifo/buffer_fifo/infer_fifo.block_ram_performance.fifo_ram_reg | 1 K x 32(NO_CHANGE)    | W |   | 1 K x 32(WRITE_FIRST)  |   | R | Port A and B     | 0      | 1      | 
+|bft         | ingressLoop[4].ingressFifo/buffer_fifo/infer_fifo.block_ram_performance.fifo_ram_reg | 1 K x 32(NO_CHANGE)    | W |   | 1 K x 32(WRITE_FIRST)  |   | R | Port A and B     | 0      | 1      | 
+|bft         | ingressLoop[5].ingressFifo/buffer_fifo/infer_fifo.block_ram_performance.fifo_ram_reg | 1 K x 32(NO_CHANGE)    | W |   | 1 K x 32(WRITE_FIRST)  |   | R | Port A and B     | 0      | 1      | 
+|bft         | ingressLoop[6].ingressFifo/buffer_fifo/infer_fifo.block_ram_performance.fifo_ram_reg | 1 K x 32(NO_CHANGE)    | W |   | 1 K x 32(WRITE_FIRST)  |   | R | Port A and B     | 0      | 1      | 
+|bft         | ingressLoop[7].ingressFifo/buffer_fifo/infer_fifo.block_ram_performance.fifo_ram_reg | 1 K x 32(NO_CHANGE)    | W |   | 1 K x 32(WRITE_FIRST)  |   | R | Port A and B     | 0      | 1      | 
+|bft         | egressLoop[0].egressFifo/buffer_fifo/infer_fifo.block_ram_performance.fifo_ram_reg   | 1 K x 32(NO_CHANGE)    | W |   | 1 K x 32(WRITE_FIRST)  |   | R | Port A and B     | 0      | 1      | 
+|bft         | egressLoop[1].egressFifo/buffer_fifo/infer_fifo.block_ram_performance.fifo_ram_reg   | 1 K x 32(NO_CHANGE)    | W |   | 1 K x 32(WRITE_FIRST)  |   | R | Port A and B     | 0      | 1      | 
+|bft         | egressLoop[2].egressFifo/buffer_fifo/infer_fifo.block_ram_performance.fifo_ram_reg   | 1 K x 32(NO_CHANGE)    | W |   | 1 K x 32(WRITE_FIRST)  |   | R | Port A and B     | 0      | 1      | 
+|bft         | egressLoop[3].egressFifo/buffer_fifo/infer_fifo.block_ram_performance.fifo_ram_reg   | 1 K x 32(NO_CHANGE)    | W |   | 1 K x 32(WRITE_FIRST)  |   | R | Port A and B     | 0      | 1      | 
+|bft         | egressLoop[4].egressFifo/buffer_fifo/infer_fifo.block_ram_performance.fifo_ram_reg   | 1 K x 32(NO_CHANGE)    | W |   | 1 K x 32(WRITE_FIRST)  |   | R | Port A and B     | 0      | 1      | 
+|bft         | egressLoop[5].egressFifo/buffer_fifo/infer_fifo.block_ram_performance.fifo_ram_reg   | 1 K x 32(NO_CHANGE)    | W |   | 1 K x 32(WRITE_FIRST)  |   | R | Port A and B     | 0      | 1      | 
+|bft         | egressLoop[6].egressFifo/buffer_fifo/infer_fifo.block_ram_performance.fifo_ram_reg   | 1 K x 32(NO_CHANGE)    | W |   | 1 K x 32(WRITE_FIRST)  |   | R | Port A and B     | 0      | 1      | 
+|bft         | egressLoop[7].egressFifo/buffer_fifo/infer_fifo.block_ram_performance.fifo_ram_reg   | 1 K x 32(NO_CHANGE)    | W |   | 1 K x 32(WRITE_FIRST)  |   | R | Port A and B     | 0      | 1      | 
++------------+--------------------------------------------------------------------------------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
+
+---------------------------------------------------------------------------------
+Finished ROM, RAM, DSP, Shift Register and Retiming Reporting
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Technology Mapping
+---------------------------------------------------------------------------------
+INFO: [Synth 8-7052] The timing for the instance ingressLoop[0].ingressFifo/buffer_fifo/infer_fifo.block_ram_performance.fifo_ram_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance ingressLoop[1].ingressFifo/buffer_fifo/infer_fifo.block_ram_performance.fifo_ram_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance ingressLoop[2].ingressFifo/buffer_fifo/infer_fifo.block_ram_performance.fifo_ram_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance ingressLoop[3].ingressFifo/buffer_fifo/infer_fifo.block_ram_performance.fifo_ram_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance ingressLoop[4].ingressFifo/buffer_fifo/infer_fifo.block_ram_performance.fifo_ram_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance ingressLoop[5].ingressFifo/buffer_fifo/infer_fifo.block_ram_performance.fifo_ram_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance ingressLoop[6].ingressFifo/buffer_fifo/infer_fifo.block_ram_performance.fifo_ram_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance ingressLoop[7].ingressFifo/buffer_fifo/infer_fifo.block_ram_performance.fifo_ram_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance egressLoop[0].egressFifo/buffer_fifo/infer_fifo.block_ram_performance.fifo_ram_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance egressLoop[1].egressFifo/buffer_fifo/infer_fifo.block_ram_performance.fifo_ram_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance egressLoop[2].egressFifo/buffer_fifo/infer_fifo.block_ram_performance.fifo_ram_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance egressLoop[3].egressFifo/buffer_fifo/infer_fifo.block_ram_performance.fifo_ram_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance egressLoop[4].egressFifo/buffer_fifo/infer_fifo.block_ram_performance.fifo_ram_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance egressLoop[5].egressFifo/buffer_fifo/infer_fifo.block_ram_performance.fifo_ram_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance egressLoop[6].egressFifo/buffer_fifo/infer_fifo.block_ram_performance.fifo_ram_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance egressLoop[7].egressFifo/buffer_fifo/infer_fifo.block_ram_performance.fifo_ram_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+---------------------------------------------------------------------------------
+Finished Technology Mapping : Time (s): cpu = 00:00:17 ; elapsed = 00:00:18 . Memory (MB): peak = 2215.164 ; gain = 619.270 ; free physical = 43722 ; free virtual = 68462
+Synthesis current peak Physical Memory [PSS] (MB): peak = 1547.813; parent = 1342.109; children = 205.756
+Synthesis current peak Virtual Memory [VSS] (MB): peak = 3151.105; parent = 2183.152; children = 967.953
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished IO Insertion : Time (s): cpu = 00:00:19 ; elapsed = 00:00:21 . Memory (MB): peak = 2215.164 ; gain = 619.270 ; free physical = 43767 ; free virtual = 68507
+Synthesis current peak Physical Memory [PSS] (MB): peak = 1549.241; parent = 1343.536; children = 205.756
+Synthesis current peak Virtual Memory [VSS] (MB): peak = 3151.105; parent = 2183.152; children = 967.953
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Instances
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:19 ; elapsed = 00:00:21 . Memory (MB): peak = 2215.164 ; gain = 619.270 ; free physical = 43767 ; free virtual = 68507
+Synthesis current peak Physical Memory [PSS] (MB): peak = 1549.257; parent = 1343.552; children = 205.756
+Synthesis current peak Virtual Memory [VSS] (MB): peak = 3151.105; parent = 2183.152; children = 967.953
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Rebuilding User Hierarchy
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:20 ; elapsed = 00:00:21 . Memory (MB): peak = 2215.164 ; gain = 619.270 ; free physical = 43767 ; free virtual = 68507
+Synthesis current peak Physical Memory [PSS] (MB): peak = 1549.788; parent = 1344.083; children = 205.756
+Synthesis current peak Virtual Memory [VSS] (MB): peak = 3151.105; parent = 2183.152; children = 967.953
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Ports
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Ports : Time (s): cpu = 00:00:20 ; elapsed = 00:00:21 . Memory (MB): peak = 2215.164 ; gain = 619.270 ; free physical = 43767 ; free virtual = 68507
+Synthesis current peak Physical Memory [PSS] (MB): peak = 1549.851; parent = 1344.146; children = 205.756
+Synthesis current peak Virtual Memory [VSS] (MB): peak = 3151.105; parent = 2183.152; children = 967.953
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:20 ; elapsed = 00:00:21 . Memory (MB): peak = 2215.164 ; gain = 619.270 ; free physical = 43767 ; free virtual = 68507
+Synthesis current peak Physical Memory [PSS] (MB): peak = 1549.886; parent = 1344.181; children = 205.756
+Synthesis current peak Virtual Memory [VSS] (MB): peak = 3151.105; parent = 2183.152; children = 967.953
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Nets
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Nets : Time (s): cpu = 00:00:20 ; elapsed = 00:00:21 . Memory (MB): peak = 2215.164 ; gain = 619.270 ; free physical = 43767 ; free virtual = 68507
+Synthesis current peak Physical Memory [PSS] (MB): peak = 1549.886; parent = 1344.181; children = 205.756
+Synthesis current peak Virtual Memory [VSS] (MB): peak = 3151.105; parent = 2183.152; children = 967.953
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Writing Synthesis Report
+---------------------------------------------------------------------------------
+
+DSP Final Report (the ' indicates corresponding REG is set)
++--------------+-----------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
+|Module Name   | DSP Mapping     | A Size | B Size | C Size | D Size | P Size | AREG | BREG | CREG | DREG | ADREG | MREG | PREG | 
++--------------+-----------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
+|coreTransform | (C'+A*B')'      | 30     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (not(C'+A*B'))' | 30     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A*B')'      | 30     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (not(C'+A*B'))' | 30     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A*B')'      | 15     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (not(C'+A*B'))' | 15     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A*B')'      | 9      | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (not(C'+A*B'))' | 9      | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A*B')'      | 30     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (not(C'+A*B'))' | 30     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A*B')'      | 30     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (not(C'+A*B'))' | 30     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A*B')'      | 15     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (not(C'+A*B'))' | 15     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A*B')'      | 9      | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (not(C'+A*B'))' | 9      | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A*B')'      | 30     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (not(C'+A*B'))' | 30     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A*B')'      | 30     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (not(C'+A*B'))' | 30     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A*B')'      | 30     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (not(C'+A*B'))' | 30     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A*B')'      | 30     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (not(C'+A*B'))' | 30     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A*B')'      | 30     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (not(C'+A*B'))' | 30     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A*B')'      | 30     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (not(C'+A*B'))' | 30     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A*B')'      | 30     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (not(C'+A*B'))' | 30     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A*B')'      | 30     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (not(C'+A*B'))' | 30     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A*B')'      | 15     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (not(C'+A*B'))' | 15     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A*B')'      | 15     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (not(C'+A*B'))' | 15     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A*B')'      | 30     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (not(C'+A*B'))' | 30     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A*B')'      | 30     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (not(C'+A*B'))' | 30     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A*B')'      | 15     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (not(C'+A*B'))' | 15     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A*B')'      | 15     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (not(C'+A*B'))' | 15     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A*B')'      | 30     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (not(C'+A*B'))' | 30     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A*B')'      | 30     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (not(C'+A*B'))' | 30     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A*B')'      | 15     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (not(C'+A*B'))' | 15     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A*B')'      | 30     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (not(C'+A*B'))' | 30     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A*B')'      | 15     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (not(C'+A*B'))' | 15     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A*B')'      | 30     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (not(C'+A*B'))' | 30     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A*B')'      | 15     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (not(C'+A*B'))' | 15     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A*B')'      | 30     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (not(C'+A*B'))' | 30     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A*B')'      | 15     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (not(C'+A*B'))' | 15     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (C'+A*B')'      | 30     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
+|coreTransform | (not(C'+A*B'))' | 30     | 18     | 48     | -      | 32     | 0    | 1    | 1    | -    | -     | 0    | 1    | 
++--------------+-----------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
+
+
+Report BlackBoxes: 
++-+--------------+----------+
+| |BlackBox name |Instances |
++-+--------------+----------+
++-+--------------+----------+
+
+Report Cell Usage: 
++------+---------+------+
+|      |Cell     |Count |
++------+---------+------+
+|1     |BUFG     |     2|
+|2     |CARRY4   |    80|
+|3     |DSP48E1  |    64|
+|4     |LUT1     |    49|
+|5     |LUT2     |  1449|
+|6     |LUT3     |    85|
+|7     |LUT4     |   139|
+|8     |LUT5     |    76|
+|9     |LUT6     |   400|
+|10    |RAMB36E1 |    16|
+|11    |FDCE     |  1152|
+|12    |FDPE     |   160|
+|13    |FDRE     |    58|
+|14    |IBUF     |    37|
+|15    |OBUF     |    34|
++------+---------+------+
+---------------------------------------------------------------------------------
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:20 ; elapsed = 00:00:21 . Memory (MB): peak = 2215.164 ; gain = 619.270 ; free physical = 43767 ; free virtual = 68507
+Synthesis current peak Physical Memory [PSS] (MB): peak = 1549.979; parent = 1344.274; children = 205.756
+Synthesis current peak Virtual Memory [VSS] (MB): peak = 3151.105; parent = 2183.152; children = 967.953
+---------------------------------------------------------------------------------
+Synthesis finished with 0 errors, 0 critical warnings and 1 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:18 ; elapsed = 00:00:20 . Memory (MB): peak = 2215.164 ; gain = 460.520 ; free physical = 43838 ; free virtual = 68578
+Synthesis Optimization Complete : Time (s): cpu = 00:00:20 ; elapsed = 00:00:21 . Memory (MB): peak = 2215.164 ; gain = 619.270 ; free physical = 43838 ; free virtual = 68578
+INFO: [Project 1-571] Translating synthesized netlist
+Netlist sorting complete. Time (s): cpu = 00:00:00.03 ; elapsed = 00:00:00.03 . Memory (MB): peak = 2215.164 ; gain = 0.000 ; free physical = 43958 ; free virtual = 68699
+INFO: [Netlist 29-17] Analyzing 160 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-570] Preparing netlist for logic optimization
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2215.164 ; gain = 0.000 ; free physical = 43899 ; free virtual = 68639
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+Synth Design complete, checksum: 2e7310d0
+INFO: [Common 17-83] Releasing license: Synthesis
+80 Infos, 9 Warnings, 0 Critical Warnings and 0 Errors encountered.
+synth_design completed successfully
+synth_design: Time (s): cpu = 00:00:25 ; elapsed = 00:00:25 . Memory (MB): peak = 2215.164 ; gain = 893.777 ; free physical = 44120 ; free virtual = 68860
+INFO: [Common 17-1381] The checkpoint '/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/assignment 3/Vivado_Tutorial/Tutorial_Created_Data/project_bft/project_bft.runs/synth_1/bft.dcp' has been generated.
+INFO: [runtcl-4] Executing : report_utilization -file bft_utilization_synth.rpt -pb bft_utilization_synth.pb
+INFO: [Common 17-206] Exiting Vivado at Fri Sep  8 13:45:57 2023...
