@@ -1,0 +1,59 @@
+Task 1
+======
+1. 
+library IEEE;
+use IEEE.std_logic_1164.all;
+
+entity latch is
+  port (
+    d, g : in  std_logic;
+    q    : out std_logic
+  );
+
+end entity latch;
+
+architecture arch of latch is begin
+  q <= d when g = '1' else
+       q;
+end architecture;
+
+2.
+There can be inferred latches when a when-else expression or a case-when expression don't cover all cases.
+For the cases where nothing is specified, it is inferred that the value is kept which entails a latch.
+
+3.
+By always including a final else case in when-else statements and a when others case in case-when expressions.
+
+
+Task 2
+======
+1. The left design will have 't' as a register since it is updated after 'y' reads it and it's value is only read in the next clock. So, we need to keep the value between clock cycles.
+In the right design, 't' is always used right after being written in all process paths, so we don't need to keep its value between clock cycles.
+In this case, 't' acts like a shorthand for refering to the expression it contains.
+
+3. A signal or variable becomes a register when its value is not always used only in the same delta cycle and needs to be stored for some period of time before being read (usually clock cycles).
+
+4.
+Signals can be written in more than one process, but will likely create a driving conflict. Vivado warns about this condition with a critical warning.
+Reads on the other hand can be done by as many processes as we want, apart from fan-out restrictions.
+
+
+Task 3
+======
+1. The design implies that while a = '1', the value of b should be passed to q.
+However, because it's not on the sensitivity list it also implies that any changes that occur in b should not active the process, which would make q not receive b's value.
+This is obviously contradictory and cannot be made into a physical design.
+
+2. Yes. Because the simulation is abstract and purely logical, it is able to read b once whenever a changes to '1' and then don't update q according to b.
+During synthesis if the tool infers that b is actualy in the sensitivity list, the behaviour will change and changes to b will appear in q in the synthesized design, unlike in the simulation.
+
+3. We should make q sample b on the rising edge of a, keep its value while a = '1' and go to '0' when a = '0'.
+You could also fix the simulation by adding b to the sensitivity list.
+
+Task 4
+======
+1. If our test cases don't cover the situation in which the feedback loops causes the oscillation (like in Assignment 3, where the situation we tested didn't oscillate even though that circuit is not stable for all possible value transitions).
+It can also happen if the module is not properly coded and causes simulation to differ in behaviour from a synthesized design like was the case in Task 3 where the output was not always reading the input because of an incomplete sensitivity list.
+And of course it can happen if the feedback loop never causes infinite oscillations and stabilizes to some value in all cases (although this is not recommended since it can be hard for the tool to reason about it).
+
+2. We can have a signal reading itself if that value is only being sampled in signal edges (like in a clocked sequential circuit) or if a signal reads only itself to keep its value like in the case of a latch.
