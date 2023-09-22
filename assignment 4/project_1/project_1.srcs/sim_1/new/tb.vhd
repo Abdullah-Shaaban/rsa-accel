@@ -19,7 +19,7 @@ begin
     wait for 100 ns;
     a <= '0';
     wait for 100 ns;
-    a <= '1'; 
+    a <= '1';
     wait;
     end process;
 end mytb;
