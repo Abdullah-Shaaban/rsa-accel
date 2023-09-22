@@ -70,22 +70,36 @@ def encode_rsa(msg, e, n):
 def decode_rsa(msg, d, n):
     return mon_exp(msg, d, n)
 
+# Use cases
 
-def make_test_cases():
+def monpro_test_cases():
+    n_nums = 5
+    n = 0x82b9c9e425d9b508e4d7cbe5d5eaf42d27fd80e944f28d7fbdf71e1edbf5d943
+    a = [random.randrange(0, n) for _ in range(n_nums)]
+    b = [random.randrange(0, n) for _ in range(n_nums)]
+    out = [mon_pro(a, b, n) for (a, b) in zip(a, b)]
+    with open("monpro_golden_inputs.txt", 'w') as f:
+        # Interleave As and Bs
+        f.writelines([f"{a:0{k//4}x}\n{b:0{k//4}x}\n" for (a, b) in zip(a, b)])
+    with open("monpro_golden_outputs.txt", 'w') as f:
+        f.writelines([f"{num:0{k//4}x}\n" for num in out])
+
+
+def exp_test_cases():
     e = 0x10001
     d = 0x1a00b2b3fb036f0b31d9eae8f0c02757769c60d0c03227453c6178f9b84ba541
     n = 0x82b9c9e425d9b508e4d7cbe5d5eaf42d27fd80e944f28d7fbdf71e1edbf5d943
-    n_numbs = 5
-    numbers = [random.randrange(0, n) for _ in range(n_numbs)]
+    n_nums = 5
+    numbers = [random.randrange(0, n) for _ in range(n_nums)]
     encoded = [encode_rsa(num, e, n) for num in numbers]
-    with open("golden_inputs.txt", 'w') as f:
+    with open("exp_golden_inputs.txt", 'w') as f:
         f.writelines([f"{num:0{k//4}x}\n" for num in numbers])
-    with open("golden_outputs.txt", 'w') as f:
+    with open("exp_golden_outputs.txt", 'w') as f:
         f.writelines([f"{num:0{k//4}x}\n" for num in encoded])
 
 
-if __name__ == "__main__":
-    """ (pubkey, privkey) = rsa.newkeys(256)
+def test_against_lib():
+    (pubkey, privkey) = rsa.newkeys(256)
     print(f"{privkey.e:x}, {privkey.d:x}, {privkey.n:x}")
     msg = 2378678
     encoded = encode_rsa(msg, pubkey.e, pubkey.n)
@@ -96,5 +110,10 @@ if __name__ == "__main__":
     encoded = rsa.encrypt(msg.to_bytes(256//8 - 12), pubkey)
     decoded = rsa.decrypt(encoded, privkey)
     print("Encoded lib:", int.from_bytes(encoded))
-    print("Decoded lib:", int.from_bytes(decoded)) """
-    make_test_cases()
+    print("Decoded lib:", int.from_bytes(decoded))
+
+
+if __name__ == "__main__":
+    #test_against_lib()
+    #exp_test_cases()
+    monpro_test_cases()
