@@ -51,10 +51,9 @@ def n_residue(x, n):
 
 
 def mon_exp(M, e, n):
-    r_inv = mod_inverse(r, n)
-    # mon_pro = lambda A, B, n: mon_pro2(A, B, n, r_inv)
-    M_bar = n_residue(M, n)
-    x_bar = n_residue(1, n)
+    r2_mod = (1 << (2*k)) % n
+    M_bar = mon_pro(M, r2_mod, n)
+    x_bar = mon_pro(1, r2_mod, n)
     for i in range(k-1, -1, -1):
         x_bar = mon_pro(x_bar, x_bar, n)
         if get_bit(e, i):
