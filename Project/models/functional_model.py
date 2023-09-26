@@ -5,10 +5,6 @@ k = 256
 r = 2**k
 
 
-def get_bit(A, n):
-    return (A >> n) & 1
-
-
 def mod_inverse(x, mod):
     r, t = extended_gcd(x, mod)
     if r != 1:
@@ -30,6 +26,18 @@ def extended_gcd(x, mod):
         r, new_r = new_r, r - (quotient * new_r)
 
 
+def n_residue(x, n):
+    return (x << k) % n
+
+
+def mon_pro2(A, B, n, r_inv):
+    return (A * B * r_inv) % n
+
+
+def get_bit(A, n):
+    return (A >> n) & 1
+
+
 def mon_pro(A, B, n):
     u = 0
     for i in range(k):
@@ -40,14 +48,6 @@ def mon_pro(A, B, n):
     if u > n:
         u = u - n
     return u
-
-
-def mon_pro2(A, B, n, r_inv):
-    return (A * B * r_inv) % n
-
-
-def n_residue(x, n):
-    return (x << k) % n
 
 
 def mon_exp(M, e, n):
@@ -68,6 +68,7 @@ def encode_rsa(msg, e, n):
 
 def decode_rsa(msg, d, n):
     return mon_exp(msg, d, n)
+
 
 # Use cases
 
@@ -101,7 +102,7 @@ def test_against_lib():
     (pubkey, privkey) = rsa.newkeys(256)
     print(f"{privkey.e:x}, {privkey.d:x}, {privkey.n:x}")
     msg = 2378678
-    encoded = encode_rsa(msg, pubkey.e, pubkey.n)
+    encoded = encode_rsa(msg, privkey.e, privkey.n)
     decoded = decode_rsa(encoded, privkey.d, privkey.n)
     print("Msg:", msg)
     print("Encoded monpro:", encoded)
@@ -112,7 +113,25 @@ def test_against_lib():
     print("Decoded lib:", int.from_bytes(decoded))
 
 
+def test_against_conceptual_monpro():
+    global mon_pro
+    (pubkey, privkey) = rsa.newkeys(256)
+    print(f"{privkey.e:x}, {privkey.d:x}, {privkey.n:x}")
+    msg = 2378678
+    encoded = encode_rsa(msg, privkey.e, privkey.n)
+    decoded = decode_rsa(encoded, privkey.d, privkey.n)
+    print("Msg:", msg)
+    print("Encoded monpro:", encoded)
+    print("Decoded monpro:", decoded)
+    def mon_pro(a, b, n): return mon_pro2(a, b, n, mod_inverse(r, n))
+    encoded = encode_rsa(msg, privkey.e, privkey.n)
+    decoded = decode_rsa(encoded, privkey.d, privkey.n)
+    print("Encoded monpro2:", encoded)
+    print("Decoded monpro2:", decoded)
+
+
 if __name__ == "__main__":
-    #test_against_lib()
-    #exp_test_cases()
-    monpro_test_cases()
+    # test_against_lib()
+    test_against_conceptual_monpro()
+    # exp_test_cases()
+    # monpro_test_cases()
