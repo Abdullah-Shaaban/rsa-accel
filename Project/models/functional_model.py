@@ -148,6 +148,24 @@ def test_against_lib():
     print("Encoded lib:", encoded)
     print("Decoded lib:", decoded)
 
+    n_keys = 10
+    n_nums_per_key = 10
+    encode_ok = []
+    decode_ok = []
+    for _ in range(n_keys):
+        (_, privkey) = rsa.newkeys(256)
+        e, d, n = privkey.e, privkey.d, privkey.n
+        numbers = [random.randrange(0, n) for _ in range(n_nums_per_key)]
+        my_encoded = [encode_rsa(num, e, n) for num in numbers]
+        ref_encoded = [modulo(num, n) ** e for num in numbers]
+        my_decoded = [decode_rsa(num, d, n) for num in my_encoded]
+        ref_decoded = [num ** d for num in ref_encoded]
+        encode_ok.append(all([a == b.residue for (a, b) in zip(my_encoded, ref_encoded)]))
+        decode_ok.append(all([a == b.residue for (a, b) in zip(my_decoded, ref_decoded)]))
+    print("encode ok:", all(encode_ok))
+    print("decode ok:", all(decode_ok))
+
+
 
 def test_against_conceptual_monpro():
     global mon_pro

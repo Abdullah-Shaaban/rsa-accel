@@ -81,7 +81,7 @@ begin
         readline(golden_file, golden_line);
         hread(golden_line, P_expected_var);
         P_expected <= P_expected_var;    -- The assertion will fail because the "signal" is assigned in next delta!!!!
-        wait for 0ns;   -- Insert 1 delta
+        wait for 0 ns;   -- Insert 1 delta
         assert (P=P_expected)
             report "Expected Output is: " & to_string(P_expected) & " but Dut Output is: " & to_string(P)
             severity warning;
