@@ -1,3 +1,4 @@
+from modulo import modulo
 import random
 import rsa
 
@@ -30,8 +31,28 @@ def n_residue(x, n):
     return (x << k) % n
 
 
-def mon_pro2(A, B, n, r_inv):
+def reference_mon_pro(A, B, n):
+    r_inv = mod_inverse(r, n)
     return (A * B * r_inv) % n
+
+
+def reference_exp_lr(M, e, n):
+    C = M if get_bit(e, k-1) else 1
+    for i in range(k-2, -1, -1):
+        C = (C * C) % n
+        if get_bit(e, i):
+            C = (C * M) % n
+    return C
+
+
+def reference_exp_rl(M, e, n):
+    C = 1
+    P = M
+    for i in range(k):
+        if get_bit(e, i):
+            C = (C * P) % n
+        P = (P * P) % n
+    return C
 
 
 def get_bit(A, n):
@@ -41,16 +62,18 @@ def get_bit(A, n):
 def mon_pro(A, B, n):
     u = 0
     for i in range(k):
-        u = u + (get_bit(A, i) * B)
-        if u % 2:
-            u = u + n
+        q = (u & 1) ^ (get_bit(A, i) & (B & 1))
+        if q:
+            u = u + (get_bit(A, i) * B) + n
+        else:
+            u = u + (get_bit(A, i) * B)
         u = u >> 1
     if u > n:
         u = u - n
     return u
 
 
-def mon_exp(M, e, n):
+def mon_exp_lr(M, e, n):
     r2_mod = (1 << (2*k)) % n
     M_bar = mon_pro(M, r2_mod, n)
     x_bar = mon_pro(1, r2_mod, n)
@@ -62,12 +85,24 @@ def mon_exp(M, e, n):
     return x
 
 
+def mon_exp_rl(msg, exponent, modulo):
+    r2_mod = (1 << (2*k)) % modulo
+    product = mon_pro(msg, r2_mod, modulo)
+    result = mon_pro(1, r2_mod, modulo)
+    for i in range(k):
+        if get_bit(exponent, i):
+            result = mon_pro(result, product, modulo)
+        product = mon_pro(product, product, modulo)
+    result = mon_pro(result, 1, modulo)
+    return result
+
+
 def encode_rsa(msg, e, n):
-    return mon_exp(msg, e, n)
+    return mon_exp_rl(msg, e, n)
 
 
 def decode_rsa(msg, d, n):
-    return mon_exp(msg, d, n)
+    return mon_exp_rl(msg, d, n)
 
 
 # Use cases
@@ -99,18 +134,19 @@ def exp_test_cases():
 
 
 def test_against_lib():
-    (pubkey, privkey) = rsa.newkeys(256)
-    print(f"{privkey.e:x}, {privkey.d:x}, {privkey.n:x}")
+    (_, privkey) = rsa.newkeys(256)
+    e, d, n = privkey.e, privkey.d, privkey.n
+    print(f"{e:x}, {d:x}, {n:x}")
     msg = 2378678
-    encoded = encode_rsa(msg, privkey.e, privkey.n)
-    decoded = decode_rsa(encoded, privkey.d, privkey.n)
+    encoded = encode_rsa(msg, e, n)
+    decoded = decode_rsa(encoded, d, n)
     print("Msg:", msg)
     print("Encoded monpro:", encoded)
     print("Decoded monpro:", decoded)
-    encoded = rsa.encrypt(msg.to_bytes(256//8 - 12), pubkey)
-    decoded = rsa.decrypt(encoded, privkey)
-    print("Encoded lib:", int.from_bytes(encoded))
-    print("Decoded lib:", int.from_bytes(decoded))
+    encoded = modulo(msg, n) ** e
+    decoded = encoded ** d
+    print("Encoded lib:", encoded)
+    print("Decoded lib:", decoded)
 
 
 def test_against_conceptual_monpro():
@@ -123,15 +159,37 @@ def test_against_conceptual_monpro():
     print("Msg:", msg)
     print("Encoded monpro:", encoded)
     print("Decoded monpro:", decoded)
-    def mon_pro(a, b, n): return mon_pro2(a, b, n, mod_inverse(r, n))
+    def mon_pro(a, b, n): return reference_mon_pro(a, b, n, mod_inverse(r, n))
     encoded = encode_rsa(msg, privkey.e, privkey.n)
     decoded = decode_rsa(encoded, privkey.d, privkey.n)
-    print("Encoded monpro2:", encoded)
-    print("Decoded monpro2:", decoded)
+    print("Encoded ref monpro:", encoded)
+    print("Decoded ref monpro:", decoded)
+
+
+def test_lr_x_rl():
+    global mon_pro
+    (_, privkey) = rsa.newkeys(256)
+    e, d, n = privkey.e, privkey.d, privkey.n
+    print(f"{e:x}, {d:x}, {n:x}")
+    msg = 2378678
+    print("Msg:", msg)
+    encoded = mon_exp_lr(msg, e, n)
+    decoded = mon_exp_lr(encoded, d, n)
+    print("Encoded lr:", encoded)
+    print("Decoded lr:", decoded)
+    encoded = mon_exp_rl(msg, e, n)
+    decoded = mon_exp_rl(encoded, d, n)
+    print("Encoded rl:", encoded)
+    print("Decoded rl:", decoded)
+    encoded = reference_exp_rl(msg, e, n)
+    decoded = reference_exp_rl(encoded, d, n)
+    print("Encoded reference rl:", encoded)
+    print("Decoded reference rl:", decoded)
 
 
 if __name__ == "__main__":
-    # test_against_lib()
-    test_against_conceptual_monpro()
+    test_against_lib()
+    # test_against_conceptual_monpro()
+    # test_lr_x_rl()
     # exp_test_cases()
     # monpro_test_cases()
