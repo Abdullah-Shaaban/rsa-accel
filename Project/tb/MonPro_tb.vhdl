@@ -65,7 +65,7 @@ begin
     load <= '0';
     A <= (others => '0');
     B <= (others => '0');
-    wait for 2*cycle;
+    wait for 2.5*cycle;
     rst_n <= '1';
     while not endfile(inputs_file) loop
         readline(inputs_file, inputs_line);
