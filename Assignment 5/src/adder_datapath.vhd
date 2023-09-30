@@ -1,6 +1,6 @@
 ----------------------------------------------------------------------------------
 -- Company    :  NTNU
--- Engineer   : Øystein Gjermundnes
+-- Engineer   : ï¿½ystein Gjermundnes
 -- 
 -- Create Date: 09/11/2016 04:21:16 PM
 -- Module Name: mega_adder_datapath
@@ -44,8 +44,13 @@ architecture rtl of adder_datapath is
   signal b_r, b_nxt: std_logic_vector(127 downto 0);
   
   -- Signals associated with the output registers
-  signal y_r, y_nxt: std_logic_vector(127 downto 0);
-    
+  signal y_r : std_logic_vector(127 downto 0);
+  signal y_load_val : std_logic_vector(127 downto 0);
+  
+  -- addition signals
+  signal add_reg: std_logic_vector(127 downto 0);
+  signal add_33: unsigned(32 downto 0);
+  signal carry_out : std_logic;
 begin
 
   -- ***************************************************************************
@@ -54,11 +59,11 @@ begin
   process (clk, reset_n) begin
     if(reset_n = '0') then
       a_r <= (others => '0');
-      b_r <= (others => '0');      
+      b_r <= (others => '0'); 
     elsif(clk'event and clk='1') then
       if(input_reg_en ='1') then
         a_r <= a_nxt;
-        b_r <= b_nxt;        
+        b_r <= b_nxt;      
       end if;
     end if;
   end process;
@@ -73,23 +78,33 @@ begin
   -- Add the content of a_r and b_r and store it in y_r.
   -- Logic for shifting out the content of y_r to data_out
   -- ***************************************************************************
+  y_load_val <= std_logic_vector(add_33(31 downto 0)) & add_reg(127 downto 32);
   process (clk, reset_n) begin
     if(reset_n = '0') then
       y_r <= (others => '0');     
     elsif(clk'event and clk='1') then
       if(output_reg_en ='1') then
-        y_r <= y_nxt;       
+        if(output_reg_load = '1') then
+          y_r <= y_load_val;
+        else
+          y_r <= x"00000000" & y_r(127 downto 32);
+        end if;
       end if;
     end if;
   end process;
-  
-  process (y_r, a_r, b_r, output_reg_load) begin
-    if(output_reg_load = '1') then
-      y_nxt <= std_logic_vector(unsigned(a_r) + unsigned(b_r));
-    else
-      y_nxt <= x"00000000" & y_r(127 downto 32);
+
+  process (clk, reset_n) begin
+    if(reset_n = '0') then
+      add_reg <= (others => '0');     
+      carry_out <= '0';
+    elsif(clk'event and clk='1') then
+      carry_out <= add_33(32);
+      if(input_reg_en = '1') then
+        add_reg <= std_logic_vector(add_33(31 downto 0)) & add_reg(127 downto 32);
+      end if;
     end if;
   end process;
+  add_33 <= unsigned('0' & a_r(127 downto 96)) + unsigned('0' & b_r(127 downto 96)) + ("" & carry_out);
   
   data_out <= y_r(31 downto 0);
 
