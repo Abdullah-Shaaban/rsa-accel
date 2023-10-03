@@ -18,7 +18,7 @@ entity MonPro is
 end entity MonPro;
 architecture rtl of MonPro is
   -- Registers for A, B, and U
-  signal A_reg        : unsigned(k - 1 downto 0);
+  signal A_reg        : unsigned(k downto 0);
   signal B_reg        : unsigned(k - 1 downto 0);
   signal N_reg        : unsigned(k - 1 downto 0);
   signal U_reg        : unsigned(k - 1 downto 0);
@@ -47,20 +47,17 @@ begin
     variable sel1 : std_logic;
     variable sel2 : std_logic_vector(2 downto 0);
     variable u0   : std_logic;
-    variable A_i  : std_logic;
   begin
     -- Mux1: Select the first input of the adder
     sel1 := pre_process;
-    -- sel1 <= pre_process;
     if sel1 = '1' then
       add_in1 <= N_reg;
     else
       add_in1 <= U_reg;
     end if;
     -- Mux2: Select the second input of the adder
-    A_i := A_reg(0);
-    u0  := U_reg(0) xor (A_i and B_reg(0));
-    sel2 := u0 & A_i & sel1;
+    u0  := U_reg(0) xor (A_reg(0) and B_reg(0));
+    sel2 := u0 & A_reg(0) & sel1;
     case sel2 is
       when "000" =>
         add_in2 <= (others => '0');
@@ -80,34 +77,21 @@ begin
     U_minus_N <= U_reg - N_reg;
   end process;
 
-  -- Registers
-  process (rst_n, clk)
+  -- Data Registers, no need for reset
+  process (clk)
   begin
-    if rst_n = '0' then
-      B_reg        <= (others => '0');
-      N_reg        <= (others => '0');
-      B_plus_N_reg <= (others => '0');
-    elsif rising_edge(clk) then
+    if rising_edge(clk) then
       if load = '1' then -- Pulse
+        A_reg <= A & '0'; -- Compensate for 1 early shift. Avoids making MUX
         B_reg <= B;
         N_reg <= N;
+      else
+        A_reg <= '0' & A_reg(k downto 1); -- Shift right
       end if;
       if pre_process = '1' then
+        U_reg <= (others => '0'); -- Initialize U_reg with zero just before starting the counter next cycle
         B_plus_N_reg <= add_out;
-      end if;
-    end if;
-  end process;
-  process (rst_n, clk)
-  begin
-    if rst_n = '0' then
-      A_reg        <= (others => '0');
-      U_reg        <= (others => '0');
-    elsif rising_edge(clk) then
-      if load = '1' then -- Pulse
-        A_reg <= A;
-        U_reg <= (others => '0'); -- U starts at 0
-      elsif pre_process = '0' then
-        A_reg <= '0' & A_reg(k-1 downto 1); -- Shift right
+      else
         U_reg <= add_out(k downto 1); -- The U/2 is done here by omitting U_out(0)
       end if;
     end if;
