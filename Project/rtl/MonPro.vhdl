@@ -14,7 +14,7 @@ entity MonPro is
     B     : in  unsigned(k - 1 downto 0);
     N     : in  unsigned(k - 1 downto 0);
     done  : out std_logic;
-    P     : out unsigned(k - 1 downto 0));
+    out_p     : out unsigned(k - 1 downto 0));
 end entity MonPro;
 architecture rtl of MonPro is
   -- Registers for A, B, and U
@@ -40,10 +40,6 @@ architecture rtl of MonPro is
   signal add_in2 : unsigned(k downto 0); -- This is k+1 bits because B+n can be k+1 bits
   signal add_out : unsigned(k downto 0);
 
-  -- signal sel1 : std_logic;
-  -- signal sel2 : std_logic_vector(2 downto 0);
-  -- signal u0   : std_logic;
-  -- signal A_i  : std_logic;
 begin
 
   -- Data path
@@ -65,9 +61,6 @@ begin
     A_i := A_reg(0);
     u0  := U_reg(0) xor (A_i and B_reg(0));
     sel2 := u0 & A_i & sel1;
-    -- A_i <= A_reg(0);
-    -- u0  <= U_reg(0) xor (A_i and B_reg(0));
-    -- sel2 <= u0 & A_i & sel1;
     case sel2 is
       when "000" =>
         add_in2 <= (others => '0');
@@ -88,23 +81,32 @@ begin
   end process;
 
   -- Registers
-  synch : process (rst_n, clk)
+  process (rst_n, clk)
   begin
     if rst_n = '0' then
-      A_reg        <= (others => '0');
       B_reg        <= (others => '0');
       N_reg        <= (others => '0');
-      U_reg        <= (others => '0');
       B_plus_N_reg <= (others => '0');
     elsif rising_edge(clk) then
       if load = '1' then -- Pulse
-        A_reg <= A;
         B_reg <= B;
-        U_reg <= (others => '0'); -- U starts at 0
         N_reg <= N;
-      elsif pre_process = '1' then
+      end if;
+      if pre_process = '1' then
         B_plus_N_reg <= add_out;
-      else
+      end if;
+    end if;
+  end process;
+  process (rst_n, clk)
+  begin
+    if rst_n = '0' then
+      A_reg        <= (others => '0');
+      U_reg        <= (others => '0');
+    elsif rising_edge(clk) then
+      if load = '1' then -- Pulse
+        A_reg <= A;
+        U_reg <= (others => '0'); -- U starts at 0
+      elsif pre_process = '0' then
         A_reg <= '0' & A_reg(k-1 downto 1); -- Shift right
         U_reg <= add_out(k downto 1); -- The U/2 is done here by omitting U_out(0)
       end if;
@@ -144,9 +146,9 @@ begin
   end process;
 
   -- Final Output
---  P <= U_reg when (U_minus_N(k)) else  -- Because U < N means result of U-N is negative, i.e., sign=1
+--  out_p <= U_reg when (U_minus_N(k)) else  -- Because U < N means result of U-N is negative, i.e., sign=1
 --          unsigned(U_minus_N(k-1 downto 0)); -- Optimize later by omitting the comparisong, and doing the subtraction alone.
-   P <= U_reg when (U_reg<N_reg) else  -- Because U < N means result of U-N is negative, i.e., sign=1
+   out_p <= U_reg when (U_reg<N_reg) else  -- Because U < N means result of U-N is negative, i.e., sign=1
         U_minus_N; -- Optimize later by omitting the comparisong, and doing the subtraction alone.
                                           -- Idea:  an extra register for -n and reuse the adder
   done <= done_del;
