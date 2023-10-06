@@ -33,7 +33,7 @@ architecture tb of MonPro_tb is
         B : in unsigned(k-1 downto 0);
         N : in unsigned(k-1 downto 0);
         done : out std_logic;
-        P : out unsigned(k-1 downto 0) );
+        out_p : out unsigned(k-1 downto 0) );
     end component;
 
 begin
@@ -50,7 +50,7 @@ DUT : MonPro
         B => B,
         N => N,
         done => done,
-        P => P
+        out_p => P
     );
 
 stimuli : process is
@@ -65,8 +65,9 @@ begin
     load <= '0';
     A <= (others => '0');
     B <= (others => '0');
-    wait for 2*cycle;
-    rst_n <= '1';
+    wait for 2*cycle;--2.5*cycle;
+    rst_n <= '1';    
+    wait for 2*cycle;--2.5*cycle;
     while not endfile(inputs_file) loop
         readline(inputs_file, inputs_line);
         hread(inputs_line, A_var);

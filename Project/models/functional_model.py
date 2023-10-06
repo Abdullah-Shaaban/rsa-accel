@@ -60,13 +60,19 @@ def get_bit(A, n):
 
 
 def mon_pro(A, B, n):
+    bn = B + n
     u = 0
     for i in range(k):
-        q = (u & 1) ^ (get_bit(A, i) & (B & 1))
-        if q:
-            u = u + (get_bit(A, i) * B) + n
-        else:
-            u = u + (get_bit(A, i) * B)
+        qi = (u & 1) ^ (get_bit(A, i) & (B & 1))
+        ai = get_bit(A, i)
+        if not qi and not ai:
+            u = u
+        elif not qi and ai:
+            u = u + B
+        elif qi and not ai:
+            u = u + n
+        elif qi and ai:
+            u = u + bn
         u = u >> 1
     if u > n:
         u = u - n
