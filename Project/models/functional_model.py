@@ -95,11 +95,17 @@ def mon_exp_rl(msg, exponent, modulo):
     r2_mod = (1 << (2*k)) % modulo
     product = mon_pro(msg, r2_mod, modulo)
     result = mon_pro(1, r2_mod, modulo)
+    print(f"product: {product:0{k//4}x}")
+    print(f"result: {result:0{k//4}x}\n")
     for i in range(k):
         if get_bit(exponent, i):
             result = mon_pro(result, product, modulo)
         product = mon_pro(product, product, modulo)
+        print(f"product: {product:0{k//4}x}")
+        print(f"result: {result:0{k//4}x}\n")
     result = mon_pro(result, 1, modulo)
+    print(f"product: {product:0{k//4}x}")
+    print(f"result: {result:0{k//4}x}\n")
     return result
 
 
@@ -224,9 +230,19 @@ def test_lr_x_rl():
     print("Decoded reference rl:", decoded)
 
 
+def test_fixed_nums():
+    # n = 0xba188f406e72ec94a20216e6a3508be2bd65a2e17fd858fc5c5510af39470f53
+    # e = 0x0000000000000000000000000000000000000000000000000000000000010001
+    # msg = 0x46d1a878e619501a9a0c63cdacc03f2490816ae5204c5a6f0570789481f1fa87
+    n = 0xba188f406e72ec94a20216e6a3508be2bd65a2e17fd858fc5c5510af39470f53
+    e = 0x0db9f607089e8d78c1226a5204c5d21a54138967737852a0838719a9056a3cb1
+    msg = 0x4fe88f7e62256399d95b16699970a58de3c343ef6a92ab07973b3b151ee0e811
+    mon_exp_rl(msg, e, n)
+
 if __name__ == "__main__":
+    test_fixed_nums()
     # test_against_lib()
     # test_against_conceptual_monpro()
     # test_lr_x_rl()
-    exp_test_cases()
+    # exp_test_cases()
     # monpro_test_cases()

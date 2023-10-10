@@ -10,8 +10,8 @@ end entity MonExp_tb;
 
 architecture tb of MonExp_tb is
   constant base_path : string := "/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/Project/models/";
-  file inputs_file   : text open read_mode is base_path & "monexp_golden_inputs.txt";
-  file golden_file   : text open read_mode is base_path & "monexp_golden_outputs.txt";
+  file inputs_file   : text open read_mode is base_path & "exp_golden_inputs.txt";
+  file golden_file   : text open read_mode is base_path & "exp_golden_outputs.txt";
   constant cycle     : time     := 10 ns;
   constant k         : positive := 256;
   signal clk         : std_logic := '1';
@@ -22,6 +22,7 @@ architecture tb of MonExp_tb is
   signal e           : unsigned(k - 1 downto 0);
   signal msg         : unsigned(k - 1 downto 0);
   signal done        : std_logic;
+  signal result_sig  : unsigned(k - 1 downto 0);
   signal result      : unsigned(k - 1 downto 0);
   signal expected    : unsigned(k - 1 downto 0);
   component MonExpr is
@@ -39,8 +40,8 @@ architecture tb of MonExp_tb is
     );
   end component MonExpr;
 
-  procedure read_value(signal num : out unsigned; file read_file : text) is
-    variable num_var     : unsigned;
+  procedure read_value(signal num : out unsigned(k - 1 downto 0); file read_file : text) is
+    variable num_var     : unsigned(k - 1 downto 0);
     variable read_line   : line;
     variable golden_line : line;
   begin
@@ -64,8 +65,10 @@ begin
     n      => N,
     r2     => r2,
     done   => done,
-    result => result
+    result => result_sig
   );
+
+  result <= (others => '0') when load = '1' else result_sig when done = '1' else result;
 
   stimuli : process is
     variable ok             : boolean;
@@ -78,10 +81,13 @@ begin
     load  <= '0';
     msg   <= (others => '0');
     e     <= (others => '0');
+    n     <= (others => '0');
+    r2    <= (others => '0');
     wait for 2 * cycle;--2.5*cycle;
     rst_n <= '1';
     wait for 2 * cycle;--2.5*cycle;
     while not endfile(inputs_file) loop
+      read_value(expected, golden_file);
       read_value(n, inputs_file);
       read_value(r2, inputs_file);
       read_value(e, inputs_file);
@@ -90,7 +96,6 @@ begin
       wait for cycle;
       load <= '0';
       wait until done = '1';
-      read_value(expected, golden_file);
       wait for 0 ns; -- Insert 1 delta
       assert (result = expected)
       report "Expected Output is: " & to_string(expected) & " but Dut Output is: " & to_string(result)

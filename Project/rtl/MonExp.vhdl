@@ -44,7 +44,7 @@ architecture rtl of MonExpr is
   -- To Mongom  : Transform the product and result variables into the Montgomery space by left shifting (with modulo)
   -- Loop       : Iterated squaring of the message and accumulating it in the result.
   -- From Mongom: Bring the result back from the Montgomery space into normal number space.
-  type state_t is (idle_s, to_mongom_s, loop_s, from_mongom_s);
+  type state_t is (idle_s, to_mg_fst_s, to_mg_s, loop_fst_s, loop_s, from_mg_fst_s, from_mg_s);
   signal crnt_state : state_t;
 
   -- Next state signals
@@ -72,11 +72,8 @@ architecture rtl of MonExpr is
       B     : in  unsigned(k - 1 downto 0);
       N     : in  unsigned(k - 1 downto 0);
       done  : out std_logic;
-      P     : out unsigned(k - 1 downto 0));
+      out_p : out unsigned(k - 1 downto 0));
   end component MonPro;
-
-  -- To control when to load the MonPro, active when it's the first cycle of a state.
-  signal first_cycle : std_logic;
 
   -- MonPro signals
   signal monpro_n : unsigned(k - 1 downto 0);
@@ -99,7 +96,6 @@ begin
   regs : process (rst_n, clk)
   begin
     if rst_n = '0' then
-      first_cycle <= '0';
       crnt_state  <= idle_s;
       r2_reg      <= (others => '0');
       e_reg       <= (others => '0');
@@ -108,8 +104,6 @@ begin
       result_reg  <= (others => '0');
       done_reg    <= '0';
     elsif rising_edge(clk) then
-      first_cycle <= '1' when next_state /= crnt_state else
-                     '0';
       crnt_state  <= next_state;
       r2_reg      <= next_r2_reg;
       e_reg       <= next_e_reg;
@@ -126,6 +120,7 @@ begin
     -- Always
     result   <= result_reg;
     monpro_n <= n_reg;
+    done     <= done_reg;
 
     -- Default values
     next_state       <= crnt_state;
@@ -136,7 +131,6 @@ begin
     next_result_reg  <= result_reg;
     next_done_reg    <= done_reg;
     count_en         <= '0';
-    done             <= '0';
     r_monpro_a       <= (others => '0');
     r_monpro_b       <= (others => '0');
     r_monpro_load    <= '0';
@@ -147,7 +141,7 @@ begin
     case crnt_state is
       when idle_s =>
         if load = '1' then
-          next_state       <= to_mongom_s;
+          next_state       <= to_mg_fst_s;
           next_r2_reg      <= r2;
           next_e_reg       <= e;
           next_n_reg       <= n;
@@ -155,59 +149,64 @@ begin
           next_result_reg  <= (0 => '1', others => '0');
           next_done_reg    <= '0';
         end if;
-      when to_mongom_s =>
-        -- Product and result variables into Montgomery space (left shift k bits (mod n))
-        -- product = mon_pro(msg, r2_mod, n)
-        -- result  = mon_pro(1, r2_mod, n)
-        if first_cycle = '1' then
-          p_monpro_load <= '1';
-          p_monpro_a    <= product_reg;
-          p_monpro_b    <= r2_reg;
-          r_monpro_load <= '1';
-          r_monpro_a    <= result_reg;
-          r_monpro_b    <= r2_reg;
-        elsif r_monpro_done = '1' then
-          next_state       <= loop_s;
+
+      -- Product and result variables into Montgomery space (left shift k bits (mod n))
+      -- product = mon_pro(msg, r2_mod, n)
+      -- result  = mon_pro(1, r2_mod, n)
+      when to_mg_fst_s =>
+        p_monpro_load <= '1';
+        p_monpro_a    <= product_reg;
+        p_monpro_b    <= r2_reg;
+        r_monpro_load <= '1';
+        r_monpro_a    <= result_reg;
+        r_monpro_b    <= r2_reg;
+        next_state    <= to_mg_s;
+      when to_mg_s =>
+        if r_monpro_done = '1' then
+          next_state       <= loop_fst_s;
           next_product_reg <= p_monpro_p;
           next_result_reg  <= r_monpro_p;
         end if;
+
+      -- Calculate the exponentiation by multiplying powers of 2 of the message (msg^5 = msg^1 * msg^4)
+      -- if get_bit(e, i):
+      --     result = mon_pro(result, product, n)
+      -- product = mon_pro(product, product, n)
+      when loop_fst_s =>
+        -- We implement e as a shift register so only read the last bit
+        if e_reg(0) = '1' then
+          r_monpro_load <= '1';
+          r_monpro_a    <= result_reg;
+          r_monpro_b    <= product_reg;
+        end if;
+        p_monpro_load <= '1';
+        p_monpro_a    <= product_reg;
+        p_monpro_b    <= product_reg;
+        next_state    <= loop_s;
       when loop_s =>
-        -- Calculate the exponentiation by multiplying powers of 2 of the message (msg^5 = msg^1 * msg^4)
-        -- if get_bit(e, i):
-        --     result = mon_pro(result, product, n)
-        -- product = mon_pro(product, product, n)
-        if first_cycle = '1' then
-          -- We implement e as a shift register so only read the last bit
-          if e_reg(0) = '1' then
-            r_monpro_load <= '1';
-            r_monpro_a    <= result_reg;
-            r_monpro_b    <= product_reg;
-          end if;
-          p_monpro_load <= '1';
-          p_monpro_a    <= product_reg;
-          p_monpro_b    <= product_reg;
-        elsif p_monpro_done = '1' then
+        if p_monpro_done = '1' then
           if e_reg(0) = '1' then
             next_result_reg <= r_monpro_p;
           end if;
           next_product_reg <= p_monpro_p;
+          count_en   <= '1';
           if count_done = '1' then
-            next_state <= from_mongom_s;
+            next_state <= from_mg_fst_s;
           else
-            count_en   <= '1';
             next_e_reg <= '0' & e_reg(k - 1 downto 1);
-            next_state <= loop_s;
+            next_state <= loop_fst_s;
           end if;
         end if;
 
-      when from_mongom_s =>
-        -- From Montgomery space back to normal number space (right shift k bits (mod n))
-        -- result = mon_pro(result, 1, n)
-        if first_cycle = '1' then
-          r_monpro_load <= '1';
-          r_monpro_a    <= result_reg;
-          r_monpro_b    <= (0 => '1', others => '0');
-        elsif r_monpro_done = '1' then
+      -- From Montgomery space back to normal number space (right shift k bits (mod n))
+      -- result = mon_pro(result, 1, n)
+      when from_mg_fst_s =>
+        r_monpro_load <= '1';
+        r_monpro_a    <= result_reg;
+        r_monpro_b    <= (0 => '1', others => '0');
+        next_state <= from_mg_s;
+      when from_mg_s =>
+        if r_monpro_done = '1' then
           next_state      <= idle_s;
           next_done_reg   <= '1';
           next_result_reg <= r_monpro_p;
@@ -228,7 +227,7 @@ begin
       counter_reg <= to_unsigned(k - 1, counter_reg'length);
     elsif rising_edge(clk) then
       if count_en = '1' then -- Pulse
-        if counter_reg = (others => '0') then
+        if counter_reg = 0 then
           counter_reg <= to_unsigned(k - 1, counter_reg'length);
         else
           counter_reg <= counter_reg - 1;
@@ -236,7 +235,7 @@ begin
       end if;
     end if;
   end process;
-  count_done <= '1' when counter_reg = (others => '0') else
+  count_done <= '1' when counter_reg = 0 else
                 '0';
 
   -- Montgomery product component that does the squaring (calculating powers of 2 of the msg)
@@ -250,7 +249,7 @@ begin
     B     => p_monpro_b,
     N     => monpro_n,
     done  => p_monpro_done,
-    P     => p_monpro_p
+    out_p => p_monpro_p
   );
 
   -- Montgomery product component that multiplies the result by the current power of 2 of the msg.
@@ -259,12 +258,12 @@ begin
   port map(
     clk   => clk,
     rst_n => rst_n,
-    load  => p_monpro_load,
+    load  => r_monpro_load,
     A     => r_monpro_a,
     B     => r_monpro_b,
     N     => monpro_n,
     done  => r_monpro_done,
-    P     => r_monpro_p
+    out_p => r_monpro_p
   );
 
 end architecture;
