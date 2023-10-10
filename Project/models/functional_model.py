@@ -127,16 +127,28 @@ def monpro_test_cases():
 
 
 def exp_test_cases():
-    e = 0x10001
-    d = 0x1a00b2b3fb036f0b31d9eae8f0c02757769c60d0c03227453c6178f9b84ba541
-    n = 0x82b9c9e425d9b508e4d7cbe5d5eaf42d27fd80e944f28d7fbdf71e1edbf5d943
-    n_nums = 5
-    numbers = [random.randrange(0, n) for _ in range(n_nums)]
-    encoded = [encode_rsa(num, e, n) for num in numbers]
-    with open("exp_golden_inputs.txt", 'w') as f:
-        f.writelines([f"{num:0{k//4}x}\n" for num in numbers])
-    with open("exp_golden_outputs.txt", 'w') as f:
-        f.writelines([f"{num:0{k//4}x}\n" for num in encoded])
+    with open("exp_golden_inputs.txt", 'w') as f_in:
+        with open("exp_golden_outputs.txt", 'w') as f_out:
+            n_nums = 5
+            for i in range(n_nums):
+                (_, privkey) = rsa.newkeys(k)
+                e, d, n = privkey.e, privkey.d, privkey.n
+                r2_mod = (1 << (2*k)) % n
+                num = random.randrange(0, n)
+                encoded = encode_rsa(num, e, n)
+                decoded = decode_rsa(num, d, n)
+
+                f_in.write(f"{n:0{k//4}x}\n")
+                f_in.write(f"{r2_mod:0{k//4}x}\n")
+                f_in.write(f"{e:0{k//4}x}\n")
+                f_in.write(f"{num:0{k//4}x}\n")
+                f_out.write(f"{encoded:0{k//4}x}\n")
+
+                f_in.write(f"{n:0{k//4}x}\n")
+                f_in.write(f"{r2_mod:0{k//4}x}\n")
+                f_in.write(f"{d:0{k//4}x}\n")
+                f_in.write(f"{encoded:0{k//4}x}\n")
+                f_out.write(f"{decoded:0{k//4}x}\n")
 
 
 def test_against_lib():
@@ -166,11 +178,12 @@ def test_against_lib():
         ref_encoded = [modulo(num, n) ** e for num in numbers]
         my_decoded = [decode_rsa(num, d, n) for num in my_encoded]
         ref_decoded = [num ** d for num in ref_encoded]
-        encode_ok.append(all([a == b.residue for (a, b) in zip(my_encoded, ref_encoded)]))
-        decode_ok.append(all([a == b.residue for (a, b) in zip(my_decoded, ref_decoded)]))
+        encode_ok.append(
+            all([a == b.residue for (a, b) in zip(my_encoded, ref_encoded)]))
+        decode_ok.append(
+            all([a == b.residue for (a, b) in zip(my_decoded, ref_decoded)]))
     print("encode ok:", all(encode_ok))
     print("decode ok:", all(decode_ok))
-
 
 
 def test_against_conceptual_monpro():
@@ -212,8 +225,8 @@ def test_lr_x_rl():
 
 
 if __name__ == "__main__":
-    test_against_lib()
+    # test_against_lib()
     # test_against_conceptual_monpro()
     # test_lr_x_rl()
-    # exp_test_cases()
+    exp_test_cases()
     # monpro_test_cases()
