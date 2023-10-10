@@ -120,8 +120,8 @@ def decode_rsa(msg, d, n):
 # Use cases
 
 def monpro_test_cases():
-    n_nums = 5
-    n = 0x82b9c9e425d9b508e4d7cbe5d5eaf42d27fd80e944f28d7fbdf71e1edbf5d943
+    n_nums = 100
+    n = 0xc9e0ecb4e5937f391371c0c1ec8a9190afc28d942ee615b466e86b525e75fb67
     a = [random.randrange(0, n) for _ in range(n_nums)]
     b = [random.randrange(0, n) for _ in range(n_nums)]
     out = [mon_pro(a, b, n) for (a, b) in zip(a, b)]
@@ -135,7 +135,7 @@ def monpro_test_cases():
 def exp_test_cases():
     with open("exp_golden_inputs.txt", 'w') as f_in:
         with open("exp_golden_outputs.txt", 'w') as f_out:
-            n_nums = 5
+            n_nums = 30
             for i in range(n_nums):
                 (_, privkey) = rsa.newkeys(k)
                 e, d, n = privkey.e, privkey.d, privkey.n
@@ -240,9 +240,9 @@ def test_fixed_nums():
     mon_exp_rl(msg, e, n)
 
 if __name__ == "__main__":
-    test_fixed_nums()
+    # test_fixed_nums()
     # test_against_lib()
     # test_against_conceptual_monpro()
     # test_lr_x_rl()
     # exp_test_cases()
-    # monpro_test_cases()
+    monpro_test_cases()
