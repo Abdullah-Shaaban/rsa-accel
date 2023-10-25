@@ -10,11 +10,11 @@ entity MonPro_tb is
 end entity MonPro_tb;
 
 architecture tb of MonPro_tb is
-    file inputs_file : text open read_mode is "C:\My_Computer\Study_Work_materials\EMECS\NTNU\Fall Semester\DDS\Project\src\monpro_golden_inputs.txt";
-    file golden_file : text open read_mode is "C:\My_Computer\Study_Work_materials\EMECS\NTNU\Fall Semester\DDS\Project\src\monpro_golden_outputs.txt";
+    file inputs_file : text open read_mode is "C:\My_Computer\Study_Work_materials\EMECS\NTNU\Fall Semester\DDS\dds-group10\Project\tb\monpro_golden_inputs.txt";
+    file golden_file : text open read_mode is "C:\My_Computer\Study_Work_materials\EMECS\NTNU\Fall Semester\DDS\dds-group10\Project\tb\monpro_golden_outputs.txt";
     constant cycle: time := 10 ns;
     constant k : positive := 256;
-    constant N : unsigned(k-1 downto 0) := x"82b9c9e425d9b508e4d7cbe5d5eaf42d27fd80e944f28d7fbdf71e1edbf5d943";
+    constant N : unsigned(k-1 downto 0) := x"c9e0ecb4e5937f391371c0c1ec8a9190afc28d942ee615b466e86b525e75fb67";
     signal clk : std_logic := '1';
     signal rst_n : std_logic;
     signal load : std_logic;
@@ -23,6 +23,14 @@ architecture tb of MonPro_tb is
     signal done : std_logic;
     signal P : unsigned(k-1 downto 0);
     signal P_expected : unsigned(k-1 downto 0);
+    -- Ref Model Signals
+    -- signal P_ref : unsigned(k-1 downto 0);
+    -- signal BN_ref : unsigned(k downto 0); 
+    -- signal A_ref : unsigned(k-1 downto 0);
+    -- signal B_ref : unsigned(k-1 downto 0);
+    -- signal N_ref : unsigned(k-1 downto 0);
+    -- signal U_ref : unsigned(k downto 0);
+    -- Declare MonPro
     component MonPro is
         generic(k : positive := 256);
         port (
@@ -84,11 +92,82 @@ begin
         P_expected <= P_expected_var;    -- The assertion will fail because the "signal" is assigned in next delta!!!!
         wait for 0 ns;   -- Insert 1 delta
         assert (P=P_expected)
-            report "Expected Output is: " & to_string(P_expected) & " but Dut Output is: " & to_string(P)
-            severity warning;
+            report "Expected Output is: " & to_hstring(P_expected) & " but Dut Output is: " & to_hstring(P)
+            severity ERROR;
         wait for cycle;
     end loop;
     wait;
 end process;
+
+monpro_ref : process
+variable BN_ref : unsigned(k downto 0); 
+variable A_ref : unsigned(k-1 downto 0);
+variable B_ref : unsigned(k-1 downto 0);
+variable N_ref : unsigned(k-1 downto 0);
+variable U_ref : unsigned(k downto 0);
+variable U_minus_N_ref : unsigned(k-1 downto 0);
+variable qi : std_logic;
+variable ai : std_logic;
+variable P_ref : unsigned(k-1 downto 0);
+variable U_dut : unsigned(k-1 downto 0);
+variable P_dut : unsigned(k-1 downto 0);
+begin
+    -- while (1)
+    wait until load = '1';
+    wait until rising_edge(clk);
+    A_ref := A;
+    B_ref := B;
+    N_ref := N;
+    wait until rising_edge(clk);
+    BN_ref := ('0' & B_ref) + ('0' & N_ref);
+    wait until rising_edge(clk);
+    U_ref := (others => '0'); -- Initialize u to zero
+    for i in 0 to k-1 loop
+        wait until rising_edge(clk);
+        -- Extract individual bits from A and B
+        qi := (U_ref(0) xor (A_ref(i) and B(0)));
+        ai := A_ref(i);
+
+        if qi = '0' and ai = '0' then
+            U_ref := U_ref; -- No change to u
+        elsif qi = '0' and ai = '1' then
+            U_ref := U_ref + ('0' & B_ref);
+        elsif qi = '1' and ai = '0' then
+            U_ref := U_ref + ('0' & N_ref);
+        elsif qi = '1' and ai = '1' then
+            U_ref := U_ref + BN_ref;
+        end if;
+
+        U_ref := '0' & U_ref(k downto 1); -- Shift right by 1
+        U_dut := << signal .MonPro_tb.DUT.U_reg : unsigned(k-1 downto 0) >> ;
+        assert (U_dut=U_ref)
+            report "U_ref is: " & to_hstring(U_ref) & " but U_dut is: " & to_hstring(U_dut)
+            severity FAILURE;
+--        wait until rising_edge(clk);
+    end loop;
+    U_minus_N_ref := U_ref(k-1 downto 0)-N_ref;
+    if U_ref > ('0' & N_ref) then
+        P_ref := U_minus_N_ref; -- Output result
+    else
+        P_ref := U_ref(k-1 downto 0); -- Output result
+    end if;
+    P_dut :=  << signal .MonPro_tb.DUT.out_p : unsigned(k-1 downto 0) >> ;
+    assert (P_dut=P_ref)
+        report "P_ref is: " & to_hstring(P_ref) & " but P_dut is: " & to_hstring(P_dut)
+        severity FAILURE; 
+
+end process;
+
+-- compare : process (rst_n, clk)
+-- begin
+--     if rst_n then
+--         if rising_edge(clk) then
+--            assert (P=P_ref)
+--             report "P_ref is: " & to_hstring(P_ref) & " but P_dut is: " & to_hstring(P)
+--             severity FAILURE; 
+--         end if;
+--     end if;
+-- end process;
+
 
 end architecture tb;
