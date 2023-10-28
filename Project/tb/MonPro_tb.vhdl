@@ -10,8 +10,9 @@ entity MonPro_tb is
 end entity MonPro_tb;
 
 architecture tb of MonPro_tb is
-    file inputs_file : text open read_mode is "C:\My_Computer\Study_Work_materials\EMECS\NTNU\Fall Semester\DDS\dds-group10\Project\tb\monpro_golden_inputs.txt";
-    file golden_file : text open read_mode is "C:\My_Computer\Study_Work_materials\EMECS\NTNU\Fall Semester\DDS\dds-group10\Project\tb\monpro_golden_outputs.txt";
+    constant base_path : string := "/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/Project/models/";
+    file inputs_file : text open read_mode is base_path & "monpro_golden_inputs.txt";
+    file golden_file : text open read_mode is base_path & "monpro_golden_outputs.txt";
     constant cycle: time := 10 ns;
     constant k : positive := 256;
     constant N : unsigned(k-1 downto 0) := x"c9e0ecb4e5937f391371c0c1ec8a9190afc28d942ee615b466e86b525e75fb67";
@@ -43,6 +44,16 @@ architecture tb of MonPro_tb is
         done : out std_logic;
         out_p : out unsigned(k-1 downto 0) );
     end component;
+
+    procedure read_value(signal num : out unsigned(k - 1 downto 0); file read_file : text) is
+        variable num_var     : unsigned(k - 1 downto 0);
+        variable read_line   : line;
+        variable golden_line : line;
+      begin
+        readline(read_file, read_line);
+        hread(read_line, num_var);
+        num <= num_var;
+      end procedure read_value;
 
 begin
     
@@ -77,19 +88,14 @@ begin
     rst_n <= '1';    
     wait for 2*cycle;--2.5*cycle;
     while not endfile(inputs_file) loop
-        readline(inputs_file, inputs_line);
-        hread(inputs_line, A_var);
-        A <= A_var;
-        readline(inputs_file, inputs_line);
-        hread(inputs_line, B_var);
-        B <= B_var;
+        read_value(A, inputs_file);
+        read_value(B, inputs_file);
         load <= '1';
         wait for cycle;
         load <= '0';
         wait until done='1';
-        readline(golden_file, golden_line);
-        hread(golden_line, P_expected_var);
-        P_expected <= P_expected_var;    -- The assertion will fail because the "signal" is assigned in next delta!!!!
+        read_value(P_expected, golden_file);
+        -- The assertion will fail because the "signal" is assigned in next delta!!!!
         wait for 0 ns;   -- Insert 1 delta
         assert (P=P_expected)
             report "Expected Output is: " & to_hstring(P_expected) & " but Dut Output is: " & to_hstring(P)
