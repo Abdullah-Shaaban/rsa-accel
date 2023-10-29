@@ -9,7 +9,7 @@ entity MonExp_tb is
 end entity MonExp_tb;
 
 architecture tb of MonExp_tb is
-  constant base_path : string := "/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/Project/models/";
+  constant base_path : string := "/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/Project/tb/";
   file inputs_file   : text open read_mode is base_path & "exp_golden_inputs.txt";
   file golden_file   : text open read_mode is base_path & "exp_golden_outputs.txt";
   constant cycle     : time     := 10 ns;
@@ -23,6 +23,8 @@ architecture tb of MonExp_tb is
   signal msg         : unsigned(k - 1 downto 0);
   signal done        : std_logic;
   signal result_sig  : unsigned(k - 1 downto 0);
+  signal ref_done    : std_logic;
+  signal ref_result  : unsigned(k - 1 downto 0);
   signal result      : unsigned(k - 1 downto 0);
   signal expected    : unsigned(k - 1 downto 0);
   component MonExpr is
@@ -54,7 +56,7 @@ begin
 
   clk <= not clk after cycle/2;
 
-  DUT : MonExpr
+  DUT : entity work.MonExpr(rtl)
   generic map(k => k)
   port map(
     clk    => clk,
@@ -67,9 +69,28 @@ begin
     done   => done,
     result => result_sig
   );
+  
+  REF : entity work.MonExpr(ref)
+  generic map(k => k)
+  port map(
+    clk    => clk,
+    rst_n  => rst_n,
+    load   => load,
+    msg    => msg,
+    e      => e,
+    n      => N,
+    r2     => r2,
+    done   => ref_done,
+    result => ref_result
+  );
 
-  result <= (others => '0') when load = '1' else result_sig when done = '1' else result;
-
+  process begin
+    wait until load = '1';
+    result <= (others => '0');
+    wait until done = '1';
+    result <= result_sig;
+  end process;
+ 
   stimuli : process is
     variable ok             : boolean;
     variable A_var          : unsigned(k - 1 downto 0);
@@ -98,7 +119,7 @@ begin
       wait until done = '1';
       wait for 0 ns; -- Insert 1 delta
       assert (result = expected)
-      report "Expected Output is: " & to_string(expected) & " but Dut Output is: " & to_string(result)
+      report "Expected Output is: " & to_hstring(expected) & " but Dut Output is: " & to_hstring(result)
         severity warning;
       wait for cycle;
     end loop;

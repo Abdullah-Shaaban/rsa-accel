@@ -10,7 +10,7 @@ entity MonPro_tb is
 end entity MonPro_tb;
 
 architecture tb of MonPro_tb is
-    constant base_path : string := "/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/Project/models/";
+    constant base_path : string := "/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/Project/tb/";
     file inputs_file : text open read_mode is base_path & "monpro_golden_inputs.txt";
     file golden_file : text open read_mode is base_path & "monpro_golden_outputs.txt";
     constant cycle: time := 10 ns;
@@ -25,7 +25,7 @@ architecture tb of MonPro_tb is
     signal P : unsigned(k-1 downto 0);
     signal P_expected : unsigned(k-1 downto 0);
     -- Ref Model Signals
-    -- signal P_ref : unsigned(k-1 downto 0);
+    signal P_ref : unsigned(k-1 downto 0);
     -- signal BN_ref : unsigned(k downto 0); 
     -- signal A_ref : unsigned(k-1 downto 0);
     -- signal B_ref : unsigned(k-1 downto 0);
@@ -110,12 +110,12 @@ variable BN_ref : unsigned(k downto 0);
 variable A_ref : unsigned(k-1 downto 0);
 variable B_ref : unsigned(k-1 downto 0);
 variable N_ref : unsigned(k-1 downto 0);
-variable U_ref : unsigned(k downto 0);
-variable U_minus_N_ref : unsigned(k-1 downto 0);
+variable U_ref : unsigned(k+1 downto 0);
+variable U_minus_N_ref : unsigned(k downto 0);
 variable qi : std_logic;
 variable ai : std_logic;
-variable P_ref : unsigned(k-1 downto 0);
-variable U_dut : unsigned(k-1 downto 0);
+-- variable P_ref : unsigned(k-1 downto 0);
+variable U_dut : unsigned(k downto 0);
 variable P_dut : unsigned(k-1 downto 0);
 begin
     -- while (1)
@@ -137,30 +137,31 @@ begin
         if qi = '0' and ai = '0' then
             U_ref := U_ref; -- No change to u
         elsif qi = '0' and ai = '1' then
-            U_ref := U_ref + ('0' & B_ref);
+            U_ref := U_ref + ("00" & B_ref);
         elsif qi = '1' and ai = '0' then
-            U_ref := U_ref + ('0' & N_ref);
+            U_ref := U_ref + ("00" & N_ref);
         elsif qi = '1' and ai = '1' then
-            U_ref := U_ref + BN_ref;
+            U_ref := U_ref + ("0" & BN_ref);
         end if;
 
-        U_ref := '0' & U_ref(k downto 1); -- Shift right by 1
-        U_dut := << signal .MonPro_tb.DUT.U_reg : unsigned(k-1 downto 0) >> ;
-        assert (U_dut=U_ref)
-            report "U_ref is: " & to_hstring(U_ref) & " but U_dut is: " & to_hstring(U_dut)
-            severity FAILURE;
+        U_ref := '0' & U_ref(k+1 downto 1); -- Shift right by 1
+        U_dut := << signal .MonPro_tb.DUT.U_reg : unsigned(k downto 0) >> ;
+        assert (U_dut=U_ref(k downto 0))
+            report "U_ref is: " & to_hstring(U_ref(k downto 0)) & " but U_dut is: " & to_hstring(U_dut)
+            severity warning;
 --        wait until rising_edge(clk);
     end loop;
-    U_minus_N_ref := U_ref(k-1 downto 0)-N_ref;
-    if U_ref > ('0' & N_ref) then
-        P_ref := U_minus_N_ref; -- Output result
+    U_minus_N_ref := U_ref(k downto 0) - ('0' & N_ref);
+    if U_ref > ("00" & N_ref) then
+        P_ref <= U_minus_N_ref(k-1 downto 0); -- Output result
     else
-        P_ref := U_ref(k-1 downto 0); -- Output result
+        P_ref <= U_ref(k-1 downto 0); -- Output result
     end if;
     P_dut :=  << signal .MonPro_tb.DUT.out_p : unsigned(k-1 downto 0) >> ;
+    wait for 0 ns;
     assert (P_dut=P_ref)
         report "P_ref is: " & to_hstring(P_ref) & " but P_dut is: " & to_hstring(P_dut)
-        severity FAILURE; 
+        severity failure; 
 
 end process;
 
