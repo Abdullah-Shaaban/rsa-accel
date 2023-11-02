@@ -1,4 +1,5 @@
 from modulo import modulo
+from sympy import randprime
 import random
 import rsa
 
@@ -95,17 +96,17 @@ def mon_exp_rl(msg, exponent, modulo):
     r2_mod = (1 << (2*k)) % modulo
     product = mon_pro(msg, r2_mod, modulo)
     result = mon_pro(1, r2_mod, modulo)
-    print(f"product: {product:0{k//4}x}")
-    print(f"result: {result:0{k//4}x}\n")
+    # print(f"product: {product:0{k//4}x}")
+    # print(f"result: {result:0{k//4}x}\n")
     for i in range(k):
         if get_bit(exponent, i):
             result = mon_pro(result, product, modulo)
         product = mon_pro(product, product, modulo)
-        print(f"product: {product:0{k//4}x}")
-        print(f"result: {result:0{k//4}x}\n")
+        # print(f"product: {product:0{k//4}x}")
+        # print(f"result: {result:0{k//4}x}\n")
     result = mon_pro(result, 1, modulo)
-    print(f"product: {product:0{k//4}x}")
-    print(f"result: {result:0{k//4}x}\n")
+    # print(f"product: {product:0{k//4}x}")
+    # print(f"result: {result:0{k//4}x}\n")
     return result
 
 
@@ -137,12 +138,13 @@ def exp_test_cases():
         with open("exp_golden_outputs.txt", 'w') as f_out:
             n_nums = 30
             for i in range(n_nums):
-                (_, privkey) = rsa.newkeys(k)
+                prime = randprime(3, 1 << 255)
+                (_, privkey) = rsa.newkeys(256, exponent=prime)
                 e, d, n = privkey.e, privkey.d, privkey.n
                 r2_mod = (1 << (2*k)) % n
                 num = random.randrange(0, n)
                 encoded = encode_rsa(num, e, n)
-                decoded = decode_rsa(num, d, n)
+                decoded = decode_rsa(encoded, d, n)
 
                 f_in.write(f"{n:0{k//4}x}\n")
                 f_in.write(f"{r2_mod:0{k//4}x}\n")
@@ -155,6 +157,13 @@ def exp_test_cases():
                 f_in.write(f"{d:0{k//4}x}\n")
                 f_in.write(f"{encoded:0{k//4}x}\n")
                 f_out.write(f"{decoded:0{k//4}x}\n")
+
+                ref_encoded = modulo(num, n) ** e
+                ref_decoded = ref_encoded ** d
+                if encoded != ref_encoded.residue:
+                    print("Encoding error")
+                if decoded != ref_decoded.residue:
+                    print("Decoding error")
 
 
 def test_against_lib():
@@ -172,12 +181,13 @@ def test_against_lib():
     print("Encoded lib:", encoded)
     print("Decoded lib:", decoded)
 
-    n_keys = 10
+    n_keys = 100
     n_nums_per_key = 10
     encode_ok = []
     decode_ok = []
     for _ in range(n_keys):
-        (_, privkey) = rsa.newkeys(256)
+        prime = randprime(3, 1 << 255)
+        (_, privkey) = rsa.newkeys(256, exponent=prime)
         e, d, n = privkey.e, privkey.d, privkey.n
         numbers = [random.randrange(0, n) for _ in range(n_nums_per_key)]
         my_encoded = [encode_rsa(num, e, n) for num in numbers]
@@ -244,5 +254,5 @@ if __name__ == "__main__":
     # test_against_lib()
     # test_against_conceptual_monpro()
     # test_lr_x_rl()
-    # exp_test_cases()
-    monpro_test_cases()
+    exp_test_cases()
+    # monpro_test_cases()
