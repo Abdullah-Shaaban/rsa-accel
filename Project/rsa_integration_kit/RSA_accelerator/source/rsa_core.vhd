@@ -60,6 +60,7 @@ entity rsa_core is
 		-----------------------------------------------------------------------------
 		key_e_d                 :  in std_logic_vector(C_BLOCK_SIZE-1 downto 0);
 		key_n                   :  in std_logic_vector(C_BLOCK_SIZE-1 downto 0);
+		r2         				:  in std_logic_vector(C_BLOCK_SIZE-1 downto 0);
 		rsa_status              : out std_logic_vector(31 downto 0)
 
 	);
@@ -81,10 +82,11 @@ begin
 			valid_out => msgout_valid,
 			result    => msgout_data ,
 			modulus   => key_n       ,
+			r2		  => r2			 ,
 			clk       => clk         ,
 			reset_n   => reset_n
 		);
 
-	msgout_last  <= msgin_last;
+	msgout_last  <= msgin_last and msgout_valid;
 	rsa_status   <= (others => '0');
 end rtl;
