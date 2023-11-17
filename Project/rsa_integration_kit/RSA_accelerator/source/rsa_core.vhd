@@ -67,7 +67,11 @@ entity rsa_core is
 end rsa_core;
 
 architecture rtl of rsa_core is
-
+	-- We buffer the msg_in_last into the msg_last_flag. When MonExp is done ( msgout_valid='1' ) and the output is acknowledged (msgout_ready='1') we bring the flag back to 0
+	-- msg_last_flag stores that this is the last message to be compute
+	-- Flag2 signals that we are currently computing the last message. 
+	-- Flag2 is needed because the last input can assert msg_in_last while we have the previous output valid. 
+	signal msg_last_flag, flag2 : std_logic;
 begin
 	i_exponentiation : entity work.exponentiation
 		generic map (
@@ -87,6 +91,25 @@ begin
 			reset_n   => reset_n
 		);
 
-	msgout_last  <= msgin_last and msgout_valid;
+	process (reset_n, clk)
+	begin
+		if reset_n = '0' then
+			msg_last_flag <= '0';
+			flag2 <= '0';
+		elsif rising_edge(clk) then
+			if msgin_last='1' then
+				msg_last_flag  <= '1';
+			elsif msgout_valid='1' and msgout_ready='1' then	
+				msg_last_flag  <= '0';
+			end if;
+			if msg_last_flag='1' and msgout_valid='0' then
+				flag2 <= '1';
+			elsif msgout_valid='1' and msgout_ready='1' then	
+				flag2 <= '0';
+			end if;
+		end if;
+	end process;
+
+	msgout_last  <= msg_last_flag and msgout_valid and flag2;
 	rsa_status   <= (others => '0');
 end rtl;

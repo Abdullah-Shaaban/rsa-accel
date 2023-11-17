@@ -8,7 +8,9 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.math_real.all;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
 use ieee.numeric_std.all;
+-- use ieee.numeric_std_unsigned.all;
 
 library std;
 use std.textio.all;
@@ -23,6 +25,7 @@ architecture struct of rsa_accelerator_tb is
 	-- Constant declarations
 	-----------------------------------------------------------------------------
 	constant C_BLOCK_SIZE   : integer := 256;
+	-- constant one			: std_logic_vector(C_BLOCK_SIZE-1 downto 0) := 1;
 
 	-- RENAME this constant to "long_test" for more comprehensive tests
 	-- "short_test" for shorter tests
@@ -63,6 +66,8 @@ architecture struct of rsa_accelerator_tb is
 	-----------------------------------------------------------------------------
 	signal key_e_d         : std_logic_vector(C_BLOCK_SIZE-1 downto 0);
 	signal key_n           : std_logic_vector(C_BLOCK_SIZE-1 downto 0);
+	signal key_r2          : std_logic_vector(C_BLOCK_SIZE-1 downto 0);
+	
 	signal rsa_status      : std_logic_vector(31 downto 0);
 
 	-----------------------------------------------------------------------------
@@ -329,6 +334,9 @@ begin
 	-- Process that sets up the correct keys and initializes the testcases.
 	-----------------------------------------------------------------------------
 	testcase_control: process(clk, reset_n)
+		variable shifted_one : unsigned(2*C_BLOCK_SIZE downto 0) := shift_left(to_unsigned(1, 2*C_BLOCK_SIZE+1) , 2*C_BLOCK_SIZE);
+		variable big_key_n : unsigned(2*C_BLOCK_SIZE downto 0);
+		
 	begin
 
 		if (reset_n = '0') then
@@ -360,6 +368,10 @@ begin
 
 				-- Run the testcase
 				when e_TC_RUN_TC =>
+					big_key_n := (others => '0');
+					big_key_n(C_BLOCK_SIZE-1 downto 0) := unsigned(key_n);
+				    big_key_n := shifted_one mod big_key_n;
+					key_r2 <= std_logic_vector(big_key_n(C_BLOCK_SIZE-1 downto 0));
 					if(all_input_messages_sent='1') then
 						tc_ctrl_state <= e_TC_WAIT_COMPLETED;
 					end if;
@@ -590,6 +602,7 @@ u_rsa_core : entity work.rsa_core
 		-----------------------------------------------------------------------------
 		key_e_d                => key_e_d,
 		key_n                  => key_n,
+		r2				  	   => key_r2,
 		rsa_status             => rsa_status
 
 	);

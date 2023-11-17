@@ -140,6 +140,7 @@ begin
 
     case crnt_state is
       when idle_s =>
+        next_done_reg    <= '0';
         if load = '1' then
           next_state       <= to_mg_fst_s;
           next_r2_reg      <= r2;
@@ -147,7 +148,6 @@ begin
           next_n_reg       <= n;
           next_product_reg <= msg;
           next_result_reg  <= (0 => '1', others => '0');
-          next_done_reg    <= '0';
         end if;
 
       -- Product and result variables into Montgomery space (left shift k bits (mod n))
