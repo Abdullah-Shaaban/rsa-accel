@@ -14,12 +14,12 @@ entity MonPro is
     B     : in  unsigned(k - 1 downto 0);
     N     : in  unsigned(k - 1 downto 0);
     done  : out std_logic;
-    out_p     : out unsigned(k - 1 downto 0));
+    out_p : out unsigned(k - 1 downto 0));
 end entity MonPro;
 
 architecture rtl of MonPro is
   -- Registers for A, B, and U
-  signal A_reg        : unsigned(k downto 0);
+  signal A_reg        : unsigned(k - 1 downto 0);
   signal B_reg        : unsigned(k - 1 downto 0);
   signal N_reg        : unsigned(k - 1 downto 0);
   signal U_reg        : unsigned(k downto 0); -- 1 more than the others because addition can overflow
@@ -54,8 +54,8 @@ begin
     else                add_in1 <= U_reg;
     end if;
     -- Mux2: Select the second input of the adder
-    u0  := U_reg(0) xor (A_reg(0) and B_reg(0));
-    sel2 <= (u0 & A_reg(0)) and (not(sel1) & not(sel1));
+    u0  := U_reg(0) xor (A_reg(to_integer(count)) and B_reg(0));
+    sel2 <= (u0 & A_reg(to_integer(count))) and (not(sel1) & not(sel1));
     case? sel2 is
       when "0-" =>  add_in2 <= '0' & B_reg;
       when "10" =>   add_in2 <= '0' & N_reg;
@@ -74,6 +74,7 @@ begin
     if rising_edge(clk) then
       
       if load = '1' then -- Pulse
+        A_reg <= A;
         B_reg <= B;
         N_reg <= N;
       end if;
@@ -81,10 +82,6 @@ begin
       if pre_process = '1' then   B_plus_N_reg <= add_out(k downto 0);
       end if;
 
-      if load = '1' then    A_reg <= A & '0';   -- Compensate for 1 early shift. Avoids making MUX
-      else                  A_reg <= '0' & A_reg(k downto 1);
-      end if;
-      
       if pre_process = '1' then   U_reg <= (others => '0'); -- Initialize U_reg with zero just before starting the counter next cycle
       elsif sel2 = "00" then      U_reg <= '0' & U_reg(k downto 1);
       else                        U_reg <= add_out(k+1 downto 1); -- U/2

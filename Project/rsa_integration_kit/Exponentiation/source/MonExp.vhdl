@@ -179,8 +179,7 @@ begin
       --     result = mon_pro(result, product, n)
       -- product = mon_pro(product, product, n)
       when loop_fst_s =>
-        -- We implement e as a shift register so only read the last bit
-        if e_reg(0) = '1' then
+        if e_reg(to_integer(counter_reg)) = '1' then
           r_monpro_load <= '1';
           r_monpro_a    <= result_reg;
           r_monpro_b    <= product_reg;
@@ -191,7 +190,7 @@ begin
         next_state    <= loop_s;
       when loop_s =>
         if p_monpro_done = '1' then
-          if e_reg(0) = '1' then
+          if e_reg(to_integer(counter_reg)) = '1' then
             next_result_reg <= r_monpro_p;
           end if;
           next_product_reg <= p_monpro_p;
@@ -199,7 +198,6 @@ begin
           if count_done = '1' then
             next_state <= from_mg_fst_s;
           else
-            next_e_reg <= '0' & e_reg(k - 1 downto 1);
             next_state <= loop_fst_s;
           end if;
         end if;
