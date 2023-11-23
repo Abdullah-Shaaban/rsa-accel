@@ -544,7 +544,7 @@ begin
 							assert expected_msgout_data = msgout_data
 								report "Output message differs from the expected result"
 								severity Failure;
-							assert msgout_counter(1) = msgout_last
+							assert msgout_counter=3 xnor msgout_last='1'
 								report "msgin_last/msgout_last mismatch"
 								severity Failure;
 

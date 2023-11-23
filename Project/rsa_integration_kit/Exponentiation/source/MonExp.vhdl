@@ -26,7 +26,9 @@ entity MonExp is
     n      : in  unsigned(k - 1 downto 0);
     r2     : in  unsigned(k - 1 downto 0); -- Precalculated 2^(2*k) mod n (shifting factor to montgomery space)
     done   : out std_logic;
-    result : out unsigned(k - 1 downto 0)
+    busy   : out std_logic;
+    result : out std_logic_vector(k - 1 downto 0)
+    -- result : out unsigned(k - 1 downto 0)
   );
 end entity MonExp;
 
@@ -44,7 +46,7 @@ architecture rtl of MonExp is
   -- To Mongom  : Transform the product and result variables into the Montgomery space by left shifting (with modulo)
   -- Loop       : Iterated squaring of the message and accumulating it in the result.
   -- From Mongom: Bring the result back from the Montgomery space into normal number space.
-  type state_t is (idle_s, to_mg_fst_s, to_mg_s, loop_fst_s, loop_s, from_mg_fst_s, from_mg_s);
+  type state_t is (reset_s, idle_s, to_mg_fst_s, to_mg_s, loop_fst_s, loop_s, from_mg_fst_s, from_mg_s);
   signal crnt_state : state_t;
 
   -- Next state signals
@@ -96,7 +98,7 @@ begin
   regs : process (rst_n, clk)
   begin
     if rst_n = '0' then
-      crnt_state  <= idle_s;
+      crnt_state  <= reset_s;
       r2_reg      <= (others => '0');
       e_reg       <= (others => '0');
       n_reg       <= (others => '0');
@@ -118,9 +120,10 @@ begin
   comb : process (all)
   begin
     -- Always
-    result   <= result_reg;
+    result   <= std_logic_vector(result_reg);
     monpro_n <= n_reg;
     done     <= done_reg;
+    busy     <= '0' when crnt_state=idle_s else '1';
 
     -- Default values
     next_state       <= crnt_state;
@@ -139,6 +142,9 @@ begin
     p_monpro_load    <= '0';
 
     case crnt_state is
+      when reset_s =>
+        next_state      <= idle_s; 
+
       when idle_s =>
         next_done_reg    <= '0';
         if load = '1' then
@@ -296,7 +302,7 @@ begin
 --         product = mon_pro(product, product, n)
 --     result = mon_pro(result, 1, n)
 --     return result
-  result <= result_reg;
+  result <= std_logic_vector(result_reg);
   process begin
     r_monpro_load <= '0';
     p_monpro_load <= '0';

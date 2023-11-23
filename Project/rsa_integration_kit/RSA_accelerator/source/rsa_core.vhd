@@ -71,7 +71,8 @@ architecture rtl of rsa_core is
 	-- msg_last_flag stores that this is the last message to be compute
 	-- Flag2 signals that we are currently computing the last message. 
 	-- Flag2 is needed because the last input can assert msg_in_last while we have the previous output valid. 
-	signal msg_last_flag, flag2 : std_logic;
+	signal msg_last_flag : std_logic;
+	signal only_one_output, no_busy_cores : std_logic;
 begin
 	i_exponentiation : entity work.exponentiation
 		generic map (
@@ -88,31 +89,27 @@ begin
 			modulus   => key_n       ,
 			r2		  => r2			 ,
 			clk       => clk         ,
-			reset_n   => reset_n
+			reset_n   => reset_n,
+			only_one_output => only_one_output,
+			no_busy_cores => no_busy_cores
 		);
 
 	process (reset_n, clk)
 	begin
 		if reset_n = '0' then
 			msg_last_flag <= '0';
-			flag2 <= '0';
 		elsif rising_edge(clk) then
 			-- We latch the msgin_last only if we are ready. Otherwise, we may mistakenly consider an ongoing computation as the last
 			-- message if the sender raises msgin_last for the next computation before we finish the current one, which is ok for the
 			-- sender to do.
 			if msgin_last='1' and msgin_ready='1' then
 				msg_last_flag  <= '1';
-			elsif msgout_valid='1' and msgout_ready='1' and flag2='1' then	
+			elsif msgout_ready='1' and msgout_last='1' then	
 				msg_last_flag  <= '0';
-			end if;
-			if msg_last_flag='1' and msgout_valid='0' then
-				flag2 <= '1';
-			elsif msgout_valid='1' and msgout_ready='1' then	
-				flag2 <= '0';
 			end if;
 		end if;
 	end process;
 
-	msgout_last  <= msg_last_flag and msgout_valid and flag2;
+	msgout_last  <= msg_last_flag and msgout_valid and only_one_output and no_busy_cores;
 	rsa_status   <= (others => '0');
 end rtl;
