@@ -471,7 +471,7 @@ begin
 								read_input_message(input_message);
 								msgin_data <= input_message;
 								report "DRIVE NEW MSGIN_DATA[" & stdvec_to_string(std_logic_vector(msgin_counter)) & "] " & "RTL: " & stdvec_to_string(input_message);
-								msgin_last <= msgin_counter(1);
+								msgin_last <= '1' when msgin_counter=3 else '0';
 								msgin_counter <= msgin_counter + 1;
 							end if;
 

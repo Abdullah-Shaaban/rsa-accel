@@ -97,9 +97,12 @@ begin
 			msg_last_flag <= '0';
 			flag2 <= '0';
 		elsif rising_edge(clk) then
-			if msgin_last='1' then
+			-- We latch the msgin_last only if we are ready. Otherwise, we may mistakenly consider an ongoing computation as the last
+			-- message if the sender raises msgin_last for the next computation before we finish the current one, which is ok for the
+			-- sender to do.
+			if msgin_last='1' and msgin_ready='1' then
 				msg_last_flag  <= '1';
-			elsif msgout_valid='1' and msgout_ready='1' then	
+			elsif msgout_valid='1' and msgout_ready='1' and flag2='1' then	
 				msg_last_flag  <= '0';
 			end if;
 			if msg_last_flag='1' and msgout_valid='0' then
