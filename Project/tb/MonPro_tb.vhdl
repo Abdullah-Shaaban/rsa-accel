@@ -10,7 +10,7 @@ entity MonPro_tb is
 end entity MonPro_tb;
 
 architecture tb of MonPro_tb is
-    constant base_path : string := "/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/Project/tb/";
+    constant base_path : string := "C:/My_Computer/Study_Work_materials/EMECS/NTNU/Fall_Semester/DDS/dds-group10/Project/tb/";
     file inputs_file : text open read_mode is base_path & "monpro_golden_inputs.txt";
     file golden_file : text open read_mode is base_path & "monpro_golden_outputs.txt";
     constant cycle: time := 10 ns;
@@ -96,7 +96,7 @@ begin
         wait until done='1';
         read_value(P_expected, golden_file);
         -- The assertion will fail because the "signal" is assigned in next delta!!!!
-        wait for 0 ns;   -- Insert 1 delta
+        wait for cycle;   -- Insert 1 delta
         assert (P=P_expected)
             report "Expected Output is: " & to_hstring(P_expected) & " but Dut Output is: " & to_hstring(P)
             severity ERROR;
@@ -118,7 +118,7 @@ variable ai : std_logic;
 variable U_dut : unsigned(k downto 0);
 variable P_dut : unsigned(k-1 downto 0);
 begin
-    -- while (1)
+while 1=1 loop
     wait until load = '1';
     wait until rising_edge(clk);
     A_ref := A;
@@ -162,7 +162,7 @@ begin
     assert (P_dut=P_ref)
         report "P_ref is: " & to_hstring(P_ref) & " but P_dut is: " & to_hstring(P_dut)
         severity failure; 
-
+end loop;
 end process;
 
 -- compare : process (rst_n, clk)

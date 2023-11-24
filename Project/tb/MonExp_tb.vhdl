@@ -9,7 +9,7 @@ entity MonExp_tb is
 end entity MonExp_tb;
 
 architecture tb of MonExp_tb is
-  constant base_path : string := "/run/media/nicolas/Coisas/Work/mestrado/design_of_digital_systems/dds-group10/Project/tb/";
+  constant base_path : string := "C:/My_Computer/Study_Work_materials/EMECS/NTNU/Fall_Semester/DDS/dds-group10/Project/tb/";
   file inputs_file   : text open read_mode is base_path & "exp_golden_inputs.txt";
   file golden_file   : text open read_mode is base_path & "exp_golden_outputs.txt";
   constant cycle     : time     := 10 ns;
@@ -22,12 +22,12 @@ architecture tb of MonExp_tb is
   signal e           : unsigned(k - 1 downto 0);
   signal msg         : unsigned(k - 1 downto 0);
   signal done        : std_logic;
-  signal result_sig  : unsigned(k - 1 downto 0);
+  signal result_sig  : std_logic_vector(k - 1 downto 0);
   signal ref_done    : std_logic;
   signal ref_result  : unsigned(k - 1 downto 0);
   signal result      : unsigned(k - 1 downto 0);
   signal expected    : unsigned(k - 1 downto 0);
-  component MonExpr is
+  component MonExp is
     generic (k : positive := 256);
     port (
       clk    : in  std_logic;
@@ -38,9 +38,10 @@ architecture tb of MonExp_tb is
       n      : in  unsigned(k - 1 downto 0);
       r2     : in  unsigned(k - 1 downto 0);
       done   : out std_logic;
-      result : out unsigned(k - 1 downto 0)
+      busy   : out std_logic;
+      result : out std_logic_vector(k - 1 downto 0)
     );
-  end component MonExpr;
+  end component MonExp;
 
   procedure read_value(signal num : out unsigned(k - 1 downto 0); file read_file : text) is
     variable num_var     : unsigned(k - 1 downto 0);
@@ -56,7 +57,7 @@ begin
 
   clk <= not clk after cycle/2;
 
-  DUT : entity work.MonExpr(rtl)
+  DUT : entity work.MonExp(rtl)
   generic map(k => k)
   port map(
     clk    => clk,
@@ -70,25 +71,25 @@ begin
     result => result_sig
   );
   
-  REF : entity work.MonExpr(ref)
-  generic map(k => k)
-  port map(
-    clk    => clk,
-    rst_n  => rst_n,
-    load   => load,
-    msg    => msg,
-    e      => e,
-    n      => N,
-    r2     => r2,
-    done   => ref_done,
-    result => ref_result
-  );
+  -- REF : entity work.MonExp(ref)
+  -- generic map(k => k)
+  -- port map(
+  --   clk    => clk,
+  --   rst_n  => rst_n,
+  --   load   => load,
+  --   msg    => msg,
+  --   e      => e,
+  --   n      => N,
+  --   r2     => r2,
+  --   done   => ref_done,
+  --   result => ref_result
+  -- );
 
   process begin
     wait until load = '1';
     result <= (others => '0');
     wait until done = '1';
-    result <= result_sig;
+    result <= unsigned(result_sig);
   end process;
  
   stimuli : process is

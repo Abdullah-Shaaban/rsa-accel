@@ -5,7 +5,7 @@ use ieee.std_logic_1164.all;
 entity exponentiation is
 	generic (
 		C_block_size : integer := 256;
-		CORE_COUNT : integer := 4
+		CORE_COUNT : integer := 12
 	);
 	port (
 		--input controll
@@ -52,19 +52,19 @@ architecture expBehave of exponentiation is
 		-- It is incremented when any of the MonExp cores asserts its "done" signal,and decremented 
 		-- when ready_out and valid_out are asserted. We keep msg_out_valid asserted when this counter
 		-- is more than 0
-	signal ready_outputs_cnt : unsigned(2 downto 0);
+	signal ready_outputs_cnt : unsigned(4 downto 0);
 
 	-- Input Core-Turn Counter 
 		-- This counter is used to select which core should be loaded if we have valid input message.
 		-- It is incremented when valid_in and ready_in are asserted. It chooses the cores strictly 
 		-- in order until it overflows and starts back at core 0.
-	signal input_cores_turn : unsigned(2 downto 0);
+	signal input_cores_turn : unsigned(4 downto 0);
 
 	-- Output Core-Turn Counter
 		-- This counter is used to select which core should be read if we have valid output message.
 		-- It is incremented when valid_out and ready_out are asserted. It chooses the cores strictly 
 		-- in order until it overflows and starts back at core 0.
-	signal output_cores_turn : unsigned(2 downto 0);	
+	signal output_cores_turn : unsigned(4 downto 0);	
 
 begin
 

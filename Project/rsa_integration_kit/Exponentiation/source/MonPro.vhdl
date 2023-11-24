@@ -33,39 +33,57 @@ architecture rtl of MonPro is
   signal cnt_max      : std_logic;
   signal done_reg     : std_logic;
   signal pre_process  : std_logic;
-  signal sel2         : std_logic_vector(1 downto 0);
-  --signal U_minus_N    : signed(k downto 0);
-  signal U_minus_N    : unsigned(k downto 0);
+  signal sel          : std_logic_vector(2 downto 0);
+
   -- Adder
   signal add_in1 : unsigned(k downto 0);
   signal add_in2 : unsigned(k downto 0); -- This is k+1 bits because B+n can be k+1 bits
   signal add_out : unsigned(k + 1 downto 0); -- This is k+2 bits because U + B+n can be k+2 bits
+  signal carry_in     : std_logic;
 
 begin
 
   -- Data path
   data_path : process (all)
-    variable sel1 : std_logic;
-    variable u0   : std_logic;
+    variable u0, ai  : std_logic;
   begin
-    -- Mux1: Select the first input of the adder
-    sel1 := pre_process;
-    if sel1 = '1' then  add_in1 <= '0' & N_reg;
-    else                add_in1 <= U_reg;
-    end if;
-    -- Mux2: Select the second input of the adder
+    -- Mux1: Select the inputs of the adder
+    ai  := A_reg(0);
     u0  := U_reg(0) xor (A_reg(0) and B_reg(0));
-    sel2 <= (u0 & A_reg(0)) and (not(sel1) & not(sel1));
-    case? sel2 is
-      when "0-" =>  add_in2 <= '0' & B_reg;
-      when "10" =>   add_in2 <= '0' & N_reg;
-      when "11" =>   add_in2 <= B_plus_N_reg;
+    if pre_process='1' then
+      sel <= "001"; 
+    elsif done_reg='1' then -- Post process
+      sel <= "011";
+    else
+      sel <= u0 & ai & '0';
+    end if;
+    case? sel is
+      when "-01" =>
+        add_in1 <= '0' & B_reg;
+        add_in2 <= '0' & N_reg;
+      when "-11" =>
+        add_in1 <= U_reg;
+        add_in2 <= '0' & not N_reg;
+      when "000" =>
+        add_in1 <= U_reg;
+        add_in2 <= (others => '0');
+      when "010" =>
+        add_in1 <= '0' & B_reg;
+        add_in2 <= U_reg;
+      when "100" =>
+        add_in1 <= U_reg;
+        add_in2 <= '0' & N_reg;
+      when "110" =>
+        add_in1 <= B_plus_N_reg;
+        add_in2 <= U_reg;
+      when others =>
+        add_in1 <= U_reg;
+        add_in2 <= (others => '0');
     end case?;
     -- Adder
-    add_out <= ('0' & add_in1) + ('0' & add_in2);
-    -- Subtractor: makes sure the output is less than N
---    U_minus_N <= signed('0'&U_reg) - signed('0'&N_reg);
-    U_minus_N <= (U_reg - ('0' & N_reg));
+    -- After we finish, we perform U + not(N) + carry_in, which is U-N.
+    carry_in <= done_reg;
+    add_out <= ('0' & add_in1) + ('0' & add_in2) + carry_in;
   end process;
 
   -- Data Registers, no need for reset
@@ -86,7 +104,6 @@ begin
       end if;
       
       if pre_process = '1' then   U_reg <= (others => '0'); -- Initialize U_reg with zero just before starting the counter next cycle
-      elsif sel2 = "00" then      U_reg <= '0' & U_reg(k downto 1);
       else                        U_reg <= add_out(k+1 downto 1); -- U/2
       end if;
 
@@ -125,60 +142,58 @@ begin
     end if;
   end process;
 
-  -- Final Output ___ Optimize later by omitting the "<" comparison, and doing the subtraction alone.
---  out_p <= U_reg when (U_minus_N(k)) else  -- Because U < N means result of U-N is negative, i.e., sign=1
---          unsigned(U_minus_N(k-1 downto 0));
-  out_p <= U_reg(k-1 downto 0) when (U_reg<N_reg) else U_minus_N(k-1 downto 0);
+  -- Final Output
+  out_p <= U_reg(k-1 downto 0) when (U_reg<N_reg) else add_out(k-1 downto 0);
   done <= done_reg;
 
 end architecture rtl;
 
-architecture ref of MonPro is
-begin
-  monpro_ref :
-  process
-    variable BN_ref : unsigned(k downto 0); 
-    variable A_ref : unsigned(k-1 downto 0);
-    variable B_ref : unsigned(k-1 downto 0);
-    variable N_ref : unsigned(k-1 downto 0);
-    variable U_ref : unsigned(k+1 downto 0);
-    variable U_minus_N_ref : unsigned(k downto 0);
-    variable qi : std_logic;
-    variable ai : std_logic;
-  begin
-    -- while (1)
-    wait until load = '1';
-    wait until rising_edge(clk);
-    A_ref := A;
-    B_ref := B;
-    N_ref := N;
-    wait until rising_edge(clk);
-    BN_ref := ('0' & B_ref) + ('0' & N_ref);
-    wait until rising_edge(clk);
-    U_ref := (others => '0'); -- Initialize u to zero
-    for i in 0 to k-1 loop
-        wait until rising_edge(clk);
-        -- Extract individual bits from A and B
-        qi := (U_ref(0) xor (A_ref(i) and B(0)));
-        ai := A_ref(i);
+-- architecture ref of MonPro is
+-- begin
+--   monpro_ref :
+--   process
+--     variable BN_ref : unsigned(k downto 0); 
+--     variable A_ref : unsigned(k-1 downto 0);
+--     variable B_ref : unsigned(k-1 downto 0);
+--     variable N_ref : unsigned(k-1 downto 0);
+--     variable U_ref : unsigned(k+1 downto 0);
+--     variable U_minus_N_ref : unsigned(k downto 0);
+--     variable qi : std_logic;
+--     variable ai : std_logic;
+--   begin
+--     -- while (1)
+--     wait until load = '1';
+--     wait until rising_edge(clk);
+--     A_ref := A;
+--     B_ref := B;
+--     N_ref := N;
+--     wait until rising_edge(clk);
+--     BN_ref := ('0' & B_ref) + ('0' & N_ref);
+--     wait until rising_edge(clk);
+--     U_ref := (others => '0'); -- Initialize u to zero
+--     for i in 0 to k-1 loop
+--         wait until rising_edge(clk);
+--         -- Extract individual bits from A and B
+--         qi := (U_ref(0) xor (A_ref(i) and B(0)));
+--         ai := A_ref(i);
 
-        if qi = '0' and ai = '0' then
-            U_ref := U_ref; -- No change to u
-        elsif qi = '0' and ai = '1' then
-            U_ref := U_ref + ("00" & B_ref);
-        elsif qi = '1' and ai = '0' then
-            U_ref := U_ref + ("00" & N_ref);
-        elsif qi = '1' and ai = '1' then
-            U_ref := U_ref + ("0" & BN_ref);
-        end if;
+--         if qi = '0' and ai = '0' then
+--             U_ref := U_ref; -- No change to u
+--         elsif qi = '0' and ai = '1' then
+--             U_ref := U_ref + ("00" & B_ref);
+--         elsif qi = '1' and ai = '0' then
+--             U_ref := U_ref + ("00" & N_ref);
+--         elsif qi = '1' and ai = '1' then
+--             U_ref := U_ref + ("0" & BN_ref);
+--         end if;
 
-        U_ref := '0' & U_ref(k+1 downto 1); -- Shift right by 1
-    end loop;
-    U_minus_N_ref := U_ref(k downto 0) - ('0' & N_ref);
-    if U_ref > ("00" & N_ref) then
-        out_p <= U_minus_N_ref(k-1 downto 0); -- Output result
-    else
-        out_p <= U_ref(k-1 downto 0); -- Output result
-    end if;
-end process;
-end architecture ref;
+--         U_ref := '0' & U_ref(k+1 downto 1); -- Shift right by 1
+--     end loop;
+--     U_minus_N_ref := U_ref(k downto 0) - ('0' & N_ref);
+--     if U_ref > ("00" & N_ref) then
+--         out_p <= U_minus_N_ref(k-1 downto 0); -- Output result
+--     else
+--         out_p <= U_ref(k-1 downto 0); -- Output result
+--     end if;
+-- end process;
+-- end architecture ref;
