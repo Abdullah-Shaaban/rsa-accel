@@ -179,8 +179,7 @@ begin
       --     result = mon_pro(result, product, n)
       -- product = mon_pro(product, product, n)
       when loop_fst_s =>
-        -- We implement e as a shift register so only read the last bit
-        if e_reg(0) = '1' then
+        if e_reg(to_integer(counter_reg)) = '1' then
           r_monpro_load <= '1';
           r_monpro_a    <= result_reg;
           r_monpro_b    <= product_reg;
@@ -191,7 +190,7 @@ begin
         next_state    <= loop_s;
       when loop_s =>
         if p_monpro_done = '1' then
-          if e_reg(0) = '1' then
+          if e_reg(to_integer(counter_reg)) = '1' then
             next_result_reg <= r_monpro_p;
           end if;
           next_product_reg <= p_monpro_p;
@@ -199,7 +198,6 @@ begin
           if count_done = '1' then
             next_state <= from_mg_fst_s;
           else
-            next_e_reg <= '0' & e_reg(k - 1 downto 1);
             next_state <= loop_fst_s;
           end if;
         end if;
@@ -230,18 +228,18 @@ begin
   counter : process (rst_n, clk)
   begin
     if rst_n = '0' then
-      counter_reg <= to_unsigned(k - 1, counter_reg'length);
+      counter_reg <= to_unsigned(0, counter_reg'length);
     elsif rising_edge(clk) then
       if count_en = '1' then -- Pulse
-        if counter_reg = 0 then
-          counter_reg <= to_unsigned(k - 1, counter_reg'length);
+        if counter_reg = k - 1 then
+          counter_reg <= to_unsigned(0, counter_reg'length);
         else
-          counter_reg <= counter_reg - 1;
+          counter_reg <= counter_reg + 1;
         end if;
       end if;
     end if;
   end process;
-  count_done <= '1' when counter_reg = 0 else
+  count_done <= '1' when counter_reg = k - 1 else
                 '0';
 
   -- Montgomery product component that does the squaring (calculating powers of 2 of the msg)
@@ -274,114 +272,114 @@ begin
 
 end architecture;
 
--- architecture ref of MonExp is
---   signal n_reg       : unsigned(k - 1 downto 0);
---   signal e_reg       : unsigned(k - 1 downto 0);
---   signal r2_reg      : unsigned(k - 1 downto 0);
---   signal msg_reg     : unsigned(k - 1 downto 0);
---   signal result_reg  : unsigned(k - 1 downto 0);
---   signal product_reg : unsigned(k - 1 downto 0);
+--architecture ref of MonExp is
+--  signal n_reg       : unsigned(k - 1 downto 0);
+--  signal e_reg       : unsigned(k - 1 downto 0);
+--  signal r2_reg      : unsigned(k - 1 downto 0);
+--  signal msg_reg     : unsigned(k - 1 downto 0);
+--  signal result_reg  : unsigned(k - 1 downto 0);
+--  signal product_reg : unsigned(k - 1 downto 0);
   
---   signal p_monpro_done : std_logic;
---   signal p_monpro_load : std_logic;
---   signal p_monpro_a    : unsigned(k - 1 downto 0);
---   signal p_monpro_b    : unsigned(k - 1 downto 0);
---   signal p_monpro_p    : unsigned(k - 1 downto 0);
---   signal r_monpro_done : std_logic;
---   signal r_monpro_load : std_logic;
---   signal r_monpro_a    : unsigned(k - 1 downto 0);
---   signal r_monpro_b    : unsigned(k - 1 downto 0);
---   signal r_monpro_p    : unsigned(k - 1 downto 0);
--- begin
+--  signal p_monpro_done : std_logic;
+--  signal p_monpro_load : std_logic;
+--  signal p_monpro_a    : unsigned(k - 1 downto 0);
+--  signal p_monpro_b    : unsigned(k - 1 downto 0);
+--  signal p_monpro_p    : unsigned(k - 1 downto 0);
+--  signal r_monpro_done : std_logic;
+--  signal r_monpro_load : std_logic;
+--  signal r_monpro_a    : unsigned(k - 1 downto 0);
+--  signal r_monpro_b    : unsigned(k - 1 downto 0);
+--  signal r_monpro_p    : unsigned(k - 1 downto 0);
+--begin
 
--- --     product = mon_pro(msg, r2_mod, n)
--- --     result = mon_pro(1, r2_mod, n)
--- --     for i in range(k):
--- --         if get_bit(e, i):
--- --             result = mon_pro(result, product, n)
--- --         product = mon_pro(product, product, n)
--- --     result = mon_pro(result, 1, n)
--- --     return result
---   result <= std_logic_vector(result_reg);
---   process begin
---     r_monpro_load <= '0';
---     p_monpro_load <= '0';
---     wait until load = '1';
---     wait until rising_edge(clk);
---     result_reg <= (others => '0');
---     done <= '0';
---     n_reg <= n;
---     e_reg <= e;
---     r2_reg <= r2;
---     msg_reg <= msg;
---     wait for 0 ns;
---     r_monpro_load <= '1';
---     r_monpro_a <= to_unsigned(1, k);
---     r_monpro_b <= r2_reg;
---     p_monpro_load <= '1';
---     p_monpro_a <= msg_reg;
---     p_monpro_b <= r2_reg;
---     wait until rising_edge(clk);
---     r_monpro_load <= '0';
---     p_monpro_load <= '0';
---     wait until r_monpro_done = '1' and p_monpro_done = '1';
---     wait until rising_edge(clk);
---     result_reg <= r_monpro_p;
---     product_reg <= p_monpro_p;
---     wait for 0 ns;
---     for i in 0 to k-1 loop
---         if e_reg(i) = '1' then
---             r_monpro_load <= '1';
---             r_monpro_a <= result_reg;
---             r_monpro_b <= product_reg;
---         end if;
---         p_monpro_load <= '1';
---         p_monpro_a <= product_reg;
---         p_monpro_b <= product_reg;
---         wait until rising_edge(clk);
---         r_monpro_load <= '0';
---         p_monpro_load <= '0';
---         wait until p_monpro_done = '1';
---         wait until rising_edge(clk);
---         if e_reg(i) = '1' then
---             result_reg <= r_monpro_p;
---         end if;
---         product_reg <= p_monpro_p;
---         wait for 0 ns;
---     end loop;
---     r_monpro_load <= '1';
---     r_monpro_a <= result_reg;
---     r_monpro_b <= to_unsigned(1, k);
---     wait until rising_edge(clk);
---     r_monpro_load <= '0';
---     wait until r_monpro_done = '1';
---     wait until rising_edge(clk);
---     result_reg <= r_monpro_p;
---     done <= '1';
---   end process;
+--     product = mon_pro(msg, r2_mod, n)
+--     result = mon_pro(1, r2_mod, n)
+--     for i in range(k):
+--         if get_bit(e, i):
+--             result = mon_pro(result, product, n)
+--         product = mon_pro(product, product, n)
+--     result = mon_pro(result, 1, n)
+--     return result
+--  result <= std_logic_vector(result_reg);
+--  process begin
+--    r_monpro_load <= '0';
+--    p_monpro_load <= '0';
+--    wait until load = '1';
+--    wait until rising_edge(clk);
+--    result_reg <= (others => '0');
+--    done <= '0';
+--    n_reg <= n;
+--    e_reg <= e;
+--    r2_reg <= r2;
+--    msg_reg <= msg;
+--    wait for 0 ns;
+--    r_monpro_load <= '1';
+--    r_monpro_a <= to_unsigned(1, k);
+--    r_monpro_b <= r2_reg;
+--    p_monpro_load <= '1';
+--    p_monpro_a <= msg_reg;
+--    p_monpro_b <= r2_reg;
+--    wait until rising_edge(clk);
+--    r_monpro_load <= '0';
+--    p_monpro_load <= '0';
+--    wait until r_monpro_done = '1' and p_monpro_done = '1';
+--    wait until rising_edge(clk);
+--    result_reg <= r_monpro_p;
+--    product_reg <= p_monpro_p;
+--    wait for 0 ns;
+--    for i in 0 to k-1 loop
+--        if e_reg(i) = '1' then
+--            r_monpro_load <= '1';
+--            r_monpro_a <= result_reg;
+--            r_monpro_b <= product_reg;
+--        end if;
+--        p_monpro_load <= '1';
+--        p_monpro_a <= product_reg;
+--        p_monpro_b <= product_reg;
+--        wait until rising_edge(clk);
+--        r_monpro_load <= '0';
+--        p_monpro_load <= '0';
+--        wait until p_monpro_done = '1';
+--        wait until rising_edge(clk);
+--        if e_reg(i) = '1' then
+--            result_reg <= r_monpro_p;
+--        end if;
+--        product_reg <= p_monpro_p;
+--        wait for 0 ns;
+--    end loop;
+--    r_monpro_load <= '1';
+--    r_monpro_a <= result_reg;
+--    r_monpro_b <= to_unsigned(1, k);
+--    wait until rising_edge(clk);
+--    r_monpro_load <= '0';
+--    wait until r_monpro_done = '1';
+--    wait until rising_edge(clk);
+--    result_reg <= r_monpro_p;
+--    done <= '1';
+--  end process;
 
---   r_monpro : entity work.MonPro(rtl)
---   generic map(k => k)
---   port map(
---     clk   => clk,
---     rst_n => rst_n,
---     load  => r_monpro_load,
---     A     => r_monpro_a,
---     B     => r_monpro_b,
---     N     => n_reg,
---     done  => r_monpro_done,
---     out_p => r_monpro_p
---   );
---   p_monpro : entity work.MonPro(rtl)
---   generic map(k => k)
---   port map(
---     clk   => clk,
---     rst_n => rst_n,
---     load  => p_monpro_load,
---     A     => p_monpro_a,
---     B     => p_monpro_b,
---     N     => n_reg,
---     done  => p_monpro_done,
---     out_p => p_monpro_p
---   );
--- end architecture ref;
+--  r_monpro : entity work.MonPro(rtl)
+--  generic map(k => k)
+--  port map(
+--    clk   => clk,
+--    rst_n => rst_n,
+--    load  => r_monpro_load,
+--    A     => r_monpro_a,
+--    B     => r_monpro_b,
+--    N     => n_reg,
+--    done  => r_monpro_done,
+--    out_p => r_monpro_p
+--  );
+--  p_monpro : entity work.MonPro(rtl)
+--  generic map(k => k)
+--  port map(
+--    clk   => clk,
+--    rst_n => rst_n,
+--    load  => p_monpro_load,
+--    A     => p_monpro_a,
+--    B     => p_monpro_b,
+--    N     => n_reg,
+--    done  => p_monpro_done,
+--    out_p => p_monpro_p
+--  );
+--end architecture ref;
