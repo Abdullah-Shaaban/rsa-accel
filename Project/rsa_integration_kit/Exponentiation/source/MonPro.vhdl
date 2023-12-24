@@ -18,11 +18,12 @@ entity MonPro is
 end entity MonPro;
 
 architecture rtl of MonPro is
-  -- Registers for A, B, and U
+  -- Registers for A, B, N, U, and B+N
   signal A_reg        : unsigned(k downto 0);
   signal B_reg        : unsigned(k - 1 downto 0);
   signal N_reg        : unsigned(k - 1 downto 0);
-  signal U_reg        : unsigned(k downto 0); -- 1 more than the others because addition can overflow
+  -- The following registers have 1 more bit than the others because addition can overflow
+  signal U_reg        : unsigned(k downto 0);
   signal B_plus_N_reg : unsigned(k downto 0); 
 
   -- Counter
@@ -37,8 +38,11 @@ architecture rtl of MonPro is
 
   -- Adder
   signal add_in1 : unsigned(k downto 0);
-  signal add_in2 : unsigned(k downto 0); -- This is k+1 bits because B+n can be k+1 bits
-  signal add_out : unsigned(k + 1 downto 0); -- This is k+2 bits because U + B+n can be k+2 bits
+  -- This is k+1 bits because B+N can be k+1 bits
+  signal add_in2 : unsigned(k downto 0);
+  -- This is k+2 bits because U+(B+N) can be k+2 bits
+  signal add_out : unsigned(k + 1 downto 0);
+  -- Used for 2's complement subtraction to do U-N
   signal carry_in     : std_logic;
 
 begin
@@ -47,23 +51,28 @@ begin
   data_path : process (all)
     variable u0, ai  : std_logic;
   begin
-    -- Mux1: Select the inputs of the adder
+    -- Logic for the operands MUX selector
     ai  := A_reg(0);
     u0  := U_reg(0) xor (A_reg(0) and B_reg(0));
     if pre_process='1' then
+      -- Forcing a special value when "pre-processing"
       sel <= "001"; 
-    elsif done_reg='1' then -- Post process
+    elsif done_reg='1' then
+      -- Forcing a special value when "post-processing"
       sel <= "011";
     else
+      -- Otherwise, the selector depends on u0 and ai
       sel <= u0 & ai & '0';
     end if;
+
+    -- MUX: Select the inputs of the adder
     case? sel is
       when "-01" =>
         add_in1 <= '0' & B_reg;
         add_in2 <= '0' & N_reg;
       when "-11" =>
         add_in1 <= U_reg;
-        add_in2 <= '0' & not N_reg;
+        add_in2 <= not('0' & N_reg);
       when "000" =>
         add_in1 <= U_reg;
         add_in2 <= (others => '0');
@@ -80,6 +89,7 @@ begin
         add_in1 <= U_reg;
         add_in2 <= (others => '0');
     end case?;
+
     -- Adder
     -- After we finish, we perform U + not(N) + carry_in, which is U-N.
     carry_in <= done_reg;
@@ -90,21 +100,31 @@ begin
   process (clk)
   begin
     if rising_edge(clk) then
-      
-      if load = '1' then -- Pulse
+      -- Assuming load to be a one-cycle Pulse
+      if load = '1' then
         B_reg <= B;
         N_reg <= N;
       end if;
       
-      if pre_process = '1' then   B_plus_N_reg <= add_out(k downto 0);
+      if pre_process = '1' then   
+        B_plus_N_reg <= add_out(k downto 0);
       end if;
 
-      if load = '1' then    A_reg <= A & '0';   -- Compensate for 1 early shift. Avoids making MUX
-      else                  A_reg <= '0' & A_reg(k downto 1);
+      -- A is a shift register
+      if load = '1' then
+        -- Putting extra '0' to compensate for 1 early shift -> Avoids making an extra MUX
+        A_reg <= A & '0';
+      else
+        -- Shift          
+        A_reg <= '0' & A_reg(k downto 1);
       end if;
       
-      if pre_process = '1' then   U_reg <= (others => '0'); -- Initialize U_reg with zero just before starting the counter next cycle
-      else                        U_reg <= add_out(k+1 downto 1); -- U/2
+      if pre_process = '1' then  
+        -- Initialize U_reg with zero just before starting the counter next cycle 
+        U_reg <= (others => '0');
+      else                        
+        -- Divide U by 2
+        U_reg <= add_out(k+1 downto 1);
       end if;
 
     end if;
@@ -136,15 +156,22 @@ begin
     if rst_n = '0' then
       count <= (others => '0');
     elsif rising_edge(clk) then
-      if count_en = '1' then -- Pulse
+      if count_en = '1' then
         count <= count + 1;
       end if;
     end if;
   end process;
 
-  -- Final Output
+  -- Final Output: either U or U-N
+  -- When the output takes the value from "add_out", the output is not from a register
+  -- in MonPro, which may cause timing problems. But MonExp has a register that takes 
+  -- the output directly, and it should not matter.
   out_p <= U_reg(k-1 downto 0) when (U_reg<N_reg) else add_out(k-1 downto 0);
   done <= done_reg;
+  -- When doing add_out = {'0', U_reg} + ~{"00", N_reg} + 1, N_reg is bigger if c_out = '1'
+  -- For some reason, using the adder's output (c_out = add_out(k+1)) to indicate the comparison
+  -- (U_reg<N_reg) only saves 2 Slice LUTs! It gives worse timing (~100ps slower), which makes sense,
+  -- but I expected much more utilization savings!
 
 end architecture rtl;
 

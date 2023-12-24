@@ -223,7 +223,7 @@ begin
     end case;
   end process;
 
-  -- Decrementing Counter
+  -- Counter
   -- We only care about when it's done counting, the intermediate values are not important
   counter : process (rst_n, clk)
   begin

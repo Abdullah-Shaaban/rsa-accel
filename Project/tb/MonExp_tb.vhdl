@@ -9,7 +9,7 @@ entity MonExp_tb is
 end entity MonExp_tb;
 
 architecture tb of MonExp_tb is
-  constant base_path : string := "C:/My_Computer/Study_Work_materials/EMECS/NTNU/Fall_Semester/DDS/dds-group10/Project/tb/";
+  constant base_path : string := "C:/My_Computer/Study_Work_materials/EMECS/NTNU/Fall_Semester/DDS/Course-Repo/dds-group10/Project/tb/";
   file inputs_file   : text open read_mode is base_path & "exp_golden_inputs.txt";
   file golden_file   : text open read_mode is base_path & "exp_golden_outputs.txt";
   constant cycle     : time     := 10 ns;

@@ -10,7 +10,7 @@ entity MonPro_tb is
 end entity MonPro_tb;
 
 architecture tb of MonPro_tb is
-    constant base_path : string := "C:/My_Computer/Study_Work_materials/EMECS/NTNU/Fall_Semester/DDS/dds-group10/Project/tb/";
+    constant base_path : string := "C:/My_Computer/Study_Work_materials/EMECS/NTNU/Fall_Semester/DDS/Course-Repo/dds-group10/Project/tb/";
     file inputs_file : text open read_mode is base_path & "monpro_golden_inputs.txt";
     file golden_file : text open read_mode is base_path & "monpro_golden_outputs.txt";
     constant cycle: time := 10 ns;
