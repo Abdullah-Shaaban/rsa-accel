@@ -134,11 +134,12 @@ begin
     next_result_reg  <= result_reg;
     next_done_reg    <= done_reg;
     count_en         <= '0';
-    r_monpro_a       <= (others => '0');
-    r_monpro_b       <= (others => '0');
+    -- Using Don’t-Cares for the inputs of MonPro saves a good amount of resources.
+    r_monpro_a       <= (others => '-');
+    r_monpro_b       <= (others => '-');
     r_monpro_load    <= '0';
-    p_monpro_a       <= (others => '0');
-    p_monpro_b       <= (others => '0');
+    p_monpro_a       <= (others => '-');
+    p_monpro_b       <= (others => '-');
     p_monpro_load    <= '0';
 
     case crnt_state is

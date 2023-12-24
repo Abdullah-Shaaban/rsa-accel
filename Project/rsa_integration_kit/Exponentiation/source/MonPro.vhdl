@@ -166,7 +166,8 @@ begin
   -- When the output takes the value from "add_out", the output is not from a register
   -- in MonPro, which may cause timing problems. But MonExp has a register that takes 
   -- the output directly, and it should not matter.
-  out_p <= U_reg(k-1 downto 0) when (U_reg<N_reg) else add_out(k-1 downto 0);
+--  out_p <= U_reg(k-1 downto 0) when (U_reg<N_reg) else add_out(k-1 downto 0);
+  out_p <= U_reg(k-1 downto 0) when (add_out(k+1)='0') else add_out(k-1 downto 0);
   done <= done_reg;
   -- When doing add_out = {'0', U_reg} + ~{"00", N_reg} + 1, N_reg is bigger if c_out = '1'
   -- For some reason, using the adder's output (c_out = add_out(k+1)) to indicate the comparison
