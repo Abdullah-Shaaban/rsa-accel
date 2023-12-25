@@ -3,18 +3,6 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use IEEE.math_real.all;
 
--- Modular exponentiation using iterated right-to-left application of the montgomery product.
--- High-level algorithm:
--- def mon_exp_rl(msg, e, n):
---     r2_mod = (1 << (2*k)) % n
---     product = mon_pro(msg, r2_mod, n)
---     result = mon_pro(1, r2_mod, n)
---     for i in range(k):
---         if get_bit(e, i):
---             result = mon_pro(result, product, n)
---         product = mon_pro(product, product, n)
---     result = mon_pro(result, 1, n)
---     return result
 entity MonExp is
   generic (k : positive := 256);
   port (
@@ -28,7 +16,6 @@ entity MonExp is
     done   : out std_logic;
     busy   : out std_logic;
     result : out std_logic_vector(k - 1 downto 0)
-    -- result : out unsigned(k - 1 downto 0)
   );
 end entity MonExp;
 
@@ -37,7 +24,8 @@ architecture rtl of MonExp is
   signal r2_reg      : unsigned(k - 1 downto 0);
   signal e_reg       : unsigned(k - 1 downto 0);
   signal n_reg       : unsigned(k - 1 downto 0);
-  signal product_reg : unsigned(k - 1 downto 0);
+  -- signal product_reg : unsigned(k - 1 downto 0);
+  signal msg_bar_reg : unsigned(k - 1 downto 0);
   signal result_reg  : unsigned(k - 1 downto 0);
   signal done_reg    : std_logic;
 
@@ -46,13 +34,15 @@ architecture rtl of MonExp is
   -- To Mongom  : Transform the product and result variables into the Montgomery space by left shifting (with modulo)
   -- Loop       : Iterated squaring of the message and accumulating it in the result.
   -- From Mongom: Bring the result back from the Montgomery space into normal number space.
-  type state_t is (reset_s, idle_s, to_mg_fst_s, to_mg_s, loop_fst_s, loop_s, from_mg_fst_s, from_mg_s);
+  -- The extra states denoted with "_fst_" are used  to produce a single 'load' pulse to MonPro, then we wait inside
+  -- the state without the "_fst_" until MonPro asserts its "done" signal.
+  type state_t is (reset_s, idle_s, msg_to_mg_fst_s, msg_to_mg_s, one_to_mg_fst_s, one_to_mg_s, square_loop_fst_s, square_loop_s, product_loop_fst_s, product_loop_s, from_mg_fst_s, from_mg_s);
   signal crnt_state : state_t;
 
   -- Next state signals
   signal next_state       : state_t;
   signal next_r2_reg      : unsigned(k - 1 downto 0);
-  signal next_product_reg : unsigned(k - 1 downto 0);
+  signal next_msg_bar_reg : unsigned(k - 1 downto 0);
   signal next_e_reg       : unsigned(k - 1 downto 0);
   signal next_n_reg       : unsigned(k - 1 downto 0);
   signal next_result_reg  : unsigned(k - 1 downto 0);
@@ -63,34 +53,14 @@ architecture rtl of MonExp is
   signal count_done  : std_logic;
   signal count_en    : std_logic;
 
-  -- Montgomery Product module, calculates P = A*B*2^-k mod N
-  component MonPro is
-    generic (k : positive := 256);
-    port (
-      clk   : in  std_logic;
-      rst_n : in  std_logic;
-      load  : in  std_logic;
-      A     : in  unsigned(k - 1 downto 0);
-      B     : in  unsigned(k - 1 downto 0);
-      N     : in  unsigned(k - 1 downto 0);
-      done  : out std_logic;
-      out_p : out unsigned(k - 1 downto 0));
-  end component MonPro;
-
   -- MonPro signals
   signal monpro_n : unsigned(k - 1 downto 0);
-  -- I'm expecting both to be done at the same time and only reading one of them at a time.
-  -- TODO: think about this
-  signal p_monpro_done : std_logic;
-  signal p_monpro_load : std_logic;
-  signal p_monpro_a    : unsigned(k - 1 downto 0);
-  signal p_monpro_b    : unsigned(k - 1 downto 0);
-  signal p_monpro_p    : unsigned(k - 1 downto 0);
   signal r_monpro_done : std_logic;
   signal r_monpro_load : std_logic;
   signal r_monpro_a    : unsigned(k - 1 downto 0);
   signal r_monpro_b    : unsigned(k - 1 downto 0);
   signal r_monpro_p    : unsigned(k - 1 downto 0);
+  signal one_reg       : unsigned(k - 1 downto 0);
 
 begin
 
@@ -102,15 +72,16 @@ begin
       r2_reg      <= (others => '0');
       e_reg       <= (others => '0');
       n_reg       <= (others => '0');
-      product_reg <= (others => '0');
+      msg_bar_reg <= (others => '0');
       result_reg  <= (others => '0');
       done_reg    <= '0';
+      one_reg     <= (0 => '1', others => '0');
     elsif rising_edge(clk) then
       crnt_state  <= next_state;
       r2_reg      <= next_r2_reg;
       e_reg       <= next_e_reg;
       n_reg       <= next_n_reg;
-      product_reg <= next_product_reg;
+      msg_bar_reg <= next_msg_bar_reg;
       result_reg  <= next_result_reg;
       done_reg    <= next_done_reg;
     end if;
@@ -130,17 +101,14 @@ begin
     next_r2_reg      <= r2_reg;
     next_e_reg       <= e_reg;
     next_n_reg       <= n_reg;
-    next_product_reg <= product_reg;
+    next_msg_bar_reg <= msg_bar_reg;
     next_result_reg  <= result_reg;
     next_done_reg    <= done_reg;
     count_en         <= '0';
-    -- Using Don’t-Cares for the inputs of MonPro saves a good amount of resources.
+    -- Using Don't-Cares for the inputs of MonPro saves a good amount of resources.
     r_monpro_a       <= (others => '-');
     r_monpro_b       <= (others => '-');
     r_monpro_load    <= '0';
-    p_monpro_a       <= (others => '-');
-    p_monpro_b       <= (others => '-');
-    p_monpro_load    <= '0';
 
     case crnt_state is
       when reset_s =>
@@ -149,66 +117,89 @@ begin
       when idle_s =>
         next_done_reg    <= '0';
         if load = '1' then
-          next_state       <= to_mg_fst_s;
+          next_state       <= msg_to_mg_fst_s;
           next_r2_reg      <= r2;
           next_e_reg       <= e;
           next_n_reg       <= n;
-          next_product_reg <= msg;
-          next_result_reg  <= (0 => '1', others => '0');
+          next_msg_bar_reg <= msg;
         end if;
 
-      -- Product and result variables into Montgomery space (left shift k bits (mod n))
-      -- product = mon_pro(msg, r2_mod, n)
-      -- result  = mon_pro(1, r2_mod, n)
-      when to_mg_fst_s =>
-        p_monpro_load <= '1';
-        p_monpro_a    <= product_reg;
-        p_monpro_b    <= r2_reg;
+      -- Message into Montgomery space
+      -- msg_bar = mon_pro(msg, r2_mod, n)
+      when msg_to_mg_fst_s =>
         r_monpro_load <= '1';
-        r_monpro_a    <= result_reg;
+        r_monpro_a    <= msg_bar_reg;
         r_monpro_b    <= r2_reg;
-        next_state    <= to_mg_s;
-      when to_mg_s =>
+        next_state    <= msg_to_mg_s;
+      when msg_to_mg_s =>
         if r_monpro_done = '1' then
-          next_state       <= loop_fst_s;
-          next_product_reg <= p_monpro_p;
+          next_state       <= one_to_mg_fst_s;
+          next_msg_bar_reg  <= r_monpro_p; 
+        end if;
+
+      -- One into Montgomery space
+      -- result  = mon_pro(1, r2_mod, n)
+      when one_to_mg_fst_s =>
+        r_monpro_load <= '1';
+        r_monpro_a    <= one_reg;
+        r_monpro_b    <= r2_reg;
+        next_state    <= one_to_mg_s;
+      when one_to_mg_s =>
+        if r_monpro_done = '1' then
+          next_state       <= square_loop_fst_s;
           next_result_reg  <= r_monpro_p;
         end if;
 
       -- Calculate the exponentiation by multiplying powers of 2 of the message (msg^5 = msg^1 * msg^4)
-      -- if get_bit(e, i):
-      --     result = mon_pro(result, product, n)
-      -- product = mon_pro(product, product, n)
-      when loop_fst_s =>
-        if e_reg(to_integer(counter_reg)) = '1' then
-          r_monpro_load <= '1';
-          r_monpro_a    <= result_reg;
-          r_monpro_b    <= product_reg;
-        end if;
-        p_monpro_load <= '1';
-        p_monpro_a    <= product_reg;
-        p_monpro_b    <= product_reg;
-        next_state    <= loop_s;
-      when loop_s =>
-        if p_monpro_done = '1' then
-          if e_reg(to_integer(counter_reg)) = '1' then
+      -- result = mon_pro(result, result, n)
+      when square_loop_fst_s =>
+        r_monpro_load <= '1';
+        r_monpro_a    <= result_reg;
+        r_monpro_b    <= result_reg;
+        next_state    <= square_loop_s;
+      when square_loop_s =>
+        if r_monpro_done = '1' then
             next_result_reg <= r_monpro_p;
-          end if;
-          next_product_reg <= p_monpro_p;
-          count_en   <= '1';
-          if count_done = '1' then
-            next_state <= from_mg_fst_s;
-          else
-            next_state <= loop_fst_s;
+            if e_reg(to_integer(counter_reg)) = '1' then
+              -- if get_bit(e, i)=1, go calculate the product
+              -- We don't increment the counter just yet
+              next_state <= product_loop_fst_s;
+            else
+              -- If we don't need to calculate the product, then increment the counter
+              count_en   <= '1';
+              if count_done = '1' then
+                next_state <= from_mg_fst_s;
+              else
+                next_state <= square_loop_fst_s;
+              end if;    
           end if;
         end if;
+
+    -- if get_bit(e, i)=1, we multiply by msg_bar
+    -- result = mon_pro(result, msg_bar, n)
+    when product_loop_fst_s =>
+      r_monpro_load <= '1';
+      r_monpro_a    <= result_reg;
+      r_monpro_b    <= msg_bar_reg;
+      next_state    <= product_loop_s;
+    when product_loop_s =>
+      if r_monpro_done = '1' then
+        next_result_reg <= r_monpro_p;
+        -- Now we can increment the counter
+        count_en   <= '1';
+        if count_done = '1' then
+          next_state <= from_mg_fst_s;
+        else
+          next_state <= square_loop_fst_s;
+        end if;
+      end if;
 
       -- From Montgomery space back to normal number space (right shift k bits (mod n))
       -- result = mon_pro(result, 1, n)
       when from_mg_fst_s =>
         r_monpro_load <= '1';
         r_monpro_a    <= result_reg;
-        r_monpro_b    <= (0 => '1', others => '0');
+        r_monpro_b    <= one_reg;
         next_state <= from_mg_s;
       when from_mg_s =>
         if r_monpro_done = '1' then
@@ -224,40 +215,26 @@ begin
     end case;
   end process;
 
-  -- Counter
+  -- Decrementing Counter --> doing Left to Right scanning of the exponent
   -- We only care about when it's done counting, the intermediate values are not important
   counter : process (rst_n, clk)
   begin
     if rst_n = '0' then
-      counter_reg <= to_unsigned(0, counter_reg'length);
+      counter_reg <= to_unsigned(k - 1, counter_reg'length);
     elsif rising_edge(clk) then
       if count_en = '1' then -- Pulse
-        if counter_reg = k - 1 then
-          counter_reg <= to_unsigned(0, counter_reg'length);
+        if counter_reg = to_unsigned(0, counter_reg'length) then
+          counter_reg <= to_unsigned(k-1, counter_reg'length);
         else
-          counter_reg <= counter_reg + 1;
+          counter_reg <= counter_reg - 1;
         end if;
       end if;
     end if;
   end process;
-  count_done <= '1' when counter_reg = k - 1 else
+  count_done <= '1' when counter_reg = 0 else
                 '0';
 
-  -- Montgomery product component that does the squaring (calculating powers of 2 of the msg)
-  p_monpro : entity work.MonPro(rtl)
-  generic map(k => k)
-  port map(
-    clk   => clk,
-    rst_n => rst_n,
-    load  => p_monpro_load,
-    A     => p_monpro_a,
-    B     => p_monpro_b,
-    N     => monpro_n,
-    done  => p_monpro_done,
-    out_p => p_monpro_p
-  );
-
-  -- Montgomery product component that multiplies the result by the current power of 2 of the msg.
+  -- Montgomery product instance, calculates P = A*B*2^-k mod N
   r_monpro : entity work.MonPro(rtl)
   generic map(k => k)
   port map(
