@@ -24,7 +24,6 @@ architecture rtl of MonExp is
   signal r2_reg      : unsigned(k - 1 downto 0);
   signal e_reg       : unsigned(k - 1 downto 0);
   signal n_reg       : unsigned(k - 1 downto 0);
-  -- signal product_reg : unsigned(k - 1 downto 0);
   signal msg_bar_reg : unsigned(k - 1 downto 0);
   signal result_reg  : unsigned(k - 1 downto 0);
   signal done_reg    : std_logic;
@@ -60,7 +59,6 @@ architecture rtl of MonExp is
   signal r_monpro_a    : unsigned(k - 1 downto 0);
   signal r_monpro_b    : unsigned(k - 1 downto 0);
   signal r_monpro_p    : unsigned(k - 1 downto 0);
-  signal one_reg       : unsigned(k - 1 downto 0);
 
 begin
 
@@ -75,7 +73,6 @@ begin
       msg_bar_reg <= (others => '0');
       result_reg  <= (others => '0');
       done_reg    <= '0';
-      one_reg     <= (0 => '1', others => '0');
     elsif rising_edge(clk) then
       crnt_state  <= next_state;
       r2_reg      <= next_r2_reg;
@@ -89,13 +86,14 @@ begin
 
   -- Calculates next state values and control for the sub-components
   comb : process (all)
+    variable one : unsigned(k - 1 downto 0);
   begin
     -- Always
     result   <= std_logic_vector(result_reg);
     monpro_n <= n_reg;
     done     <= done_reg;
     busy     <= '0' when crnt_state=idle_s else '1';
-
+    
     -- Default values
     next_state       <= crnt_state;
     next_r2_reg      <= r2_reg;
@@ -106,9 +104,50 @@ begin
     next_done_reg    <= done_reg;
     count_en         <= '0';
     -- Using Don't-Cares for the inputs of MonPro saves a good amount of resources.
-    r_monpro_a       <= (others => '-');
-    r_monpro_b       <= (others => '-');
+    -- r_monpro_a       <= (others => '-');
+    -- r_monpro_b       <= (others => '-');
     r_monpro_load    <= '0';
+    one              := (0 => '1', others => '0');
+
+
+    -- Load R2, the exponent, and the modulus
+    if (crnt_state=idle_s and load = '1') then
+      next_r2_reg      <= r2;
+      next_e_reg       <= e;
+      next_n_reg       <= n;
+    end if;
+
+    -- Load the result register only when MonPro is done
+    if (r_monpro_done='1') then
+      next_result_reg  <= r_monpro_p;
+    end if;
+    
+    -- The msg_bar register is loaded in 2 cases: when a new message comes, and when msg_bar is calculated by MonPro
+    if (crnt_state=idle_s and load='1') then
+      next_msg_bar_reg <= msg;
+    end if;
+    if crnt_state=msg_to_mg_s and r_monpro_done='1' then
+      next_msg_bar_reg <= r_monpro_p;
+    end if;
+
+    -- MUX for input_a of MonPro
+    case crnt_state is
+      when msg_to_mg_fst_s =>
+        r_monpro_a    <= msg_bar_reg;
+      when square_loop_fst_s | product_loop_fst_s =>
+        r_monpro_a    <= result_reg;
+      when others =>
+        r_monpro_a    <= one;
+    end case;
+    -- MUX for input_b of MonPro
+    case crnt_state is
+      when msg_to_mg_fst_s | one_to_mg_fst_s =>
+        r_monpro_b    <= r2_reg;
+      when product_loop_fst_s =>
+        r_monpro_b    <= msg_bar_reg;
+      when others =>
+        r_monpro_b    <= result_reg;
+    end case;
 
     case crnt_state is
       when reset_s =>
@@ -118,48 +157,35 @@ begin
         next_done_reg    <= '0';
         if load = '1' then
           next_state       <= msg_to_mg_fst_s;
-          next_r2_reg      <= r2;
-          next_e_reg       <= e;
-          next_n_reg       <= n;
-          next_msg_bar_reg <= msg;
         end if;
 
       -- Message into Montgomery space
       -- msg_bar = mon_pro(msg, r2_mod, n)
       when msg_to_mg_fst_s =>
         r_monpro_load <= '1';
-        r_monpro_a    <= msg_bar_reg;
-        r_monpro_b    <= r2_reg;
         next_state    <= msg_to_mg_s;
       when msg_to_mg_s =>
         if r_monpro_done = '1' then
           next_state       <= one_to_mg_fst_s;
-          next_msg_bar_reg  <= r_monpro_p; 
         end if;
 
       -- One into Montgomery space
       -- result  = mon_pro(1, r2_mod, n)
       when one_to_mg_fst_s =>
         r_monpro_load <= '1';
-        r_monpro_a    <= one_reg;
-        r_monpro_b    <= r2_reg;
         next_state    <= one_to_mg_s;
       when one_to_mg_s =>
         if r_monpro_done = '1' then
           next_state       <= square_loop_fst_s;
-          next_result_reg  <= r_monpro_p;
         end if;
 
       -- Calculate the exponentiation by multiplying powers of 2 of the message (msg^5 = msg^1 * msg^4)
       -- result = mon_pro(result, result, n)
       when square_loop_fst_s =>
         r_monpro_load <= '1';
-        r_monpro_a    <= result_reg;
-        r_monpro_b    <= result_reg;
         next_state    <= square_loop_s;
       when square_loop_s =>
         if r_monpro_done = '1' then
-            next_result_reg <= r_monpro_p;
             if e_reg(to_integer(counter_reg)) = '1' then
               -- if get_bit(e, i)=1, go calculate the product
               -- We don't increment the counter just yet
@@ -175,37 +201,31 @@ begin
           end if;
         end if;
 
-    -- if get_bit(e, i)=1, we multiply by msg_bar
-    -- result = mon_pro(result, msg_bar, n)
-    when product_loop_fst_s =>
-      r_monpro_load <= '1';
-      r_monpro_a    <= result_reg;
-      r_monpro_b    <= msg_bar_reg;
-      next_state    <= product_loop_s;
-    when product_loop_s =>
-      if r_monpro_done = '1' then
-        next_result_reg <= r_monpro_p;
-        -- Now we can increment the counter
-        count_en   <= '1';
-        if count_done = '1' then
-          next_state <= from_mg_fst_s;
-        else
-          next_state <= square_loop_fst_s;
+      -- if get_bit(e, i)=1, we multiply by msg_bar
+      -- result = mon_pro(result, msg_bar, n)
+      when product_loop_fst_s =>
+        r_monpro_load <= '1';
+        next_state    <= product_loop_s;
+      when product_loop_s =>
+        if r_monpro_done = '1' then
+          -- Now we can increment the counter
+          count_en   <= '1';
+          if count_done = '1' then
+            next_state <= from_mg_fst_s;
+          else
+            next_state <= square_loop_fst_s;
+          end if;
         end if;
-      end if;
 
       -- From Montgomery space back to normal number space (right shift k bits (mod n))
       -- result = mon_pro(result, 1, n)
       when from_mg_fst_s =>
         r_monpro_load <= '1';
-        r_monpro_a    <= result_reg;
-        r_monpro_b    <= one_reg;
         next_state <= from_mg_s;
       when from_mg_s =>
         if r_monpro_done = '1' then
           next_state      <= idle_s;
           next_done_reg   <= '1';
-          next_result_reg <= r_monpro_p;
         end if;
 
       when others =>

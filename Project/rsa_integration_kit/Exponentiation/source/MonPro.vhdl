@@ -65,34 +65,32 @@ begin
       sel <= u0 & ai & '0';
     end if;
 
-    -- MUX: Select the inputs of the adder
+    -- MUX1: Select first input of the adder
     case? sel is
-      when "-01" =>
+      when "-01" | "010" =>
         add_in1 <= '0' & B_reg;
-        add_in2 <= '0' & N_reg;
-      when "-11" =>
-        add_in1 <= U_reg;
-        add_in2 <= not('0' & N_reg);
-      when "000" =>
-        add_in1 <= U_reg;
-        add_in2 <= (others => '0');
-      when "010" =>
-        add_in1 <= '0' & B_reg;
-        add_in2 <= U_reg;
-      when "100" =>
-        add_in1 <= U_reg;
-        add_in2 <= '0' & N_reg;
       when "110" =>
         add_in1 <= B_plus_N_reg;
-        add_in2 <= U_reg;
       when others =>
         add_in1 <= U_reg;
+    end case?;
+
+    -- MUX2: Select second input of the adder
+    case? sel is
+      when "-01" | "100" =>
+        add_in2 <= '0' & N_reg;
+      when "-11" =>
+        add_in2 <= not('0' & N_reg);
+      when "010" | "110" =>
+        add_in2 <= U_reg;
+      when others =>
         add_in2 <= (others => '0');
     end case?;
 
-    -- Adder
     -- After we finish, we perform U + not(N) + carry_in, which is U-N.
     carry_in <= done_reg;
+    
+    -- Adder
     add_out <= ('0' & add_in1) + ('0' & add_in2) + carry_in;
   end process;
 
