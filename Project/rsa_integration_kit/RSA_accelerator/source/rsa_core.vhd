@@ -69,8 +69,6 @@ end rsa_core;
 architecture rtl of rsa_core is
 	-- We buffer the msg_in_last into the msg_last_flag. When MonExp is done ( msgout_valid='1' ) and the output is acknowledged (msgout_ready='1') we bring the flag back to 0
 	-- msg_last_flag stores that this is the last message to be compute
-	-- Flag2 signals that we are currently computing the last message. 
-	-- Flag2 is needed because the last input can assert msg_in_last while we have the previous output valid. 
 	signal msg_last_flag : std_logic;
 	signal only_one_output, no_busy_cores : std_logic;
 begin

@@ -66,11 +66,8 @@ begin
   regs : process (rst_n, clk)
   begin
     if rst_n = '0' then
+      -- Only reseting the control
       crnt_state  <= reset_s;
-      r2_reg      <= (others => '0');
-      e_reg       <= (others => '0');
-      n_reg       <= (others => '0');
-      msg_bar_reg <= (others => '0');
       result_reg  <= (others => '0');
       done_reg    <= '0';
     elsif rising_edge(clk) then
@@ -103,9 +100,6 @@ begin
     next_result_reg  <= result_reg;
     next_done_reg    <= done_reg;
     count_en         <= '0';
-    -- Using Don't-Cares for the inputs of MonPro saves a good amount of resources.
-    -- r_monpro_a       <= (others => '-');
-    -- r_monpro_b       <= (others => '-');
     r_monpro_load    <= '0';
     one              := (0 => '1', others => '0');
 

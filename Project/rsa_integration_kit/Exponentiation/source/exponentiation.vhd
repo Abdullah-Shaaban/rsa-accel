@@ -5,7 +5,7 @@ use ieee.std_logic_1164.all;
 entity exponentiation is
 	generic (
 		C_block_size : integer := 256;
-		CORE_COUNT : integer := 10
+		CORE_COUNT : integer := 16
 	);
 	port (
 		--input controll

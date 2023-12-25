@@ -450,10 +450,12 @@ proc genProj {_xil_proj_name_ top_design top_design_testbench source_files sim_f
 
 	# Create 'synth_1' run (if not found)
 	if {[string equal [get_runs -quiet synth_1] ""]} {
-			create_run -name synth_1 -part $implementation_part -flow {Vivado Synthesis 2018} -strategy "Vivado Synthesis Defaults" -report_strategy {No Reports} -constrset constrs_1
+			# create_run -name synth_1 -part $implementation_part -flow {Vivado Synthesis 2018} -strategy "Vivado Synthesis Defaults" -report_strategy {No Reports} -constrset constrs_1
+			create_run -name synth_1 -part $implementation_part -flow {Vivado Synthesis 2023} -strategy "Flow_AlternateRoutability" -report_strategy {No Reports} -constrset constrs_1
 	} else {
-		set_property strategy "Vivado Synthesis Defaults" [get_runs synth_1]
-		set_property flow "Vivado Synthesis 2018" [get_runs synth_1]
+		# set_property strategy "Vivado Synthesis Defaults" [get_runs synth_1]
+		set_property strategy "Flow_AlternateRoutability" [get_runs synth_1]
+		set_property flow "Vivado Synthesis 2023" [get_runs synth_1]
 	}
 	set obj [get_runs synth_1]
 	set_property set_report_strategy_name 1 $obj
@@ -472,17 +474,20 @@ proc genProj {_xil_proj_name_ top_design top_design_testbench source_files sim_f
 	}
 	set obj [get_runs synth_1]
 	set_property -name "part" -value $implementation_part -objects $obj
-	set_property -name "strategy" -value "Vivado Synthesis Defaults" -objects $obj
+	# set_property -name "strategy" -value "Vivado Synthesis Defaults" -objects $obj
+	set_property -name "strategy" -value "Flow_AlternateRoutability" -objects $obj
+	set_property -name "flatten_hierarchy" -value "none" -objects $obj
 
 	# set the current synth run
 	current_run -synthesis [get_runs synth_1]
 
 	# Create 'impl_1' run (if not found)
 	if {[string equal [get_runs -quiet impl_1] ""]} {
-			create_run -name impl_1 -part $implementation_part -flow {Vivado Implementation 2018} -strategy "Vivado Implementation Defaults" -report_strategy {No Reports} -constrset constrs_1 -parent_run synth_1
+			# create_run -name impl_1 -part $implementation_part -flow {Vivado Implementation 2018} -strategy "Vivado Implementation Defaults" -report_strategy {No Reports} -constrset constrs_1 -parent_run synth_1
+			create_run -name impl_1 -part $implementation_part -flow {Vivado Implementation 2023} -strategy "Vivado Implementation Defaults" -report_strategy {No Reports} -constrset constrs_1 -parent_run synth_1
 	} else {
 		set_property strategy "Vivado Implementation Defaults" [get_runs impl_1]
-		set_property flow "Vivado Implementation 2018" [get_runs impl_1]
+		set_property flow "Vivado Implementation 2023" [get_runs impl_1]
 	}
 	set obj [get_runs impl_1]
 	set_property set_report_strategy_name 1 $obj
